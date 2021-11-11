@@ -13,7 +13,7 @@ android {
         targetSdk 31
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -56,4 +56,16 @@ dependencies {
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.7'
+    implementation 'com.gruelbox:kucoin-java-sdk:2.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+
+    //XChange
+    implementation 'org.knowm.xchange:xchange-core:5.0.12'
+    implementation 'org.knowm.xchange:xchange-parent:5.0.12'
+    implementation 'org.knowm.xchange:xchange-ascendex:5.0.12'
+    implementation 'org.knowm.xchange:xchange-ftx:5.0.12'
+    implementation 'org.knowm.xchange:xchange-kucoin:5.0.12'
+    implementation 'org.knowm.xchange:xchange-binance:5.0.12'
 }

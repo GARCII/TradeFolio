@@ -2,37 +2,32 @@ package com.portfolio.tracker.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.portfolio.tracker.model.Asset
 import com.portfolio.tracker.model.Order
-import com.portfolio.tracker.repository.AccountRepository
+import com.portfolio.tracker.repository.BinanceRepository
+import com.portfolio.tracker.util.KucoinUtils
 import com.portfolio.tracker.util.LoadingState
 import com.portfolio.tracker.util.Resource
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.knowm.xchange.dto.account.Wallet
 import java.io.IOException
 
-internal class AccountViewModel : ViewModel() {
+internal class BinanceViewModel : ViewModel() {
 
     val loadingState = MutableLiveData<LoadingState>()
-    val balanceData = MutableLiveData<List<Asset>>()
+    val balanceData = MutableLiveData<Map<String, Wallet>>()
     val orderData = MutableLiveData<List<Order>>()
     val cancelOrderData = MutableLiveData<Order>()
     val createOrderData = MutableLiveData<Order>()
-    private var repository = AccountRepository()
+    private var repository = BinanceRepository()
 
     fun fetchAccountData() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                loadingState.postValue(LoadingState.LOADING)
-                val response = repository.getDailySnapshot()
-                when (response.status) {
-                    Resource.Status.SUCCESS -> {
-                        balanceData.postValue(response.data!!)
-                        loadingState.postValue(LoadingState.LOADED)
-                    }
-                    Resource.Status.ERROR -> loadingState.postValue(LoadingState.error(response.message))
-                }
+                val exchange = KucoinUtils.getExchange()
+                val accountService = exchange.accountService
+                balanceData.postValue(accountService.accountInfo.wallets)
             } catch (e: IOException) {
                 loadingState.postValue(LoadingState.error("error_message"))
             }

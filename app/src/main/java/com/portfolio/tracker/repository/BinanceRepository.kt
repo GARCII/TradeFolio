@@ -3,14 +3,14 @@ package com.portfolio.tracker.repository
 import android.net.Uri
 import android.util.Log
 import com.portfolio.tracker.model.*
-import com.portfolio.tracker.remote.APIClient
+import com.portfolio.tracker.remote.Client
 import com.portfolio.tracker.util.Signature
 import com.portfolio.tracker.util.API_SECRET
 import com.portfolio.tracker.util.Resource
 import java.util.ArrayList
 
-internal class AccountRepository {
-    private val api = APIClient.getAccountApi()
+internal class BinanceRepository {
+    private val api = Client.getBinanceApi()
 
     suspend fun getDailySnapshot(): Resource<List<Asset>> {
         val currentMilli = System.currentTimeMillis().toString()
