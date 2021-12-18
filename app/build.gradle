@@ -61,11 +61,15 @@ dependencies {
     implementation 'com.gruelbox:kucoin-java-sdk:2.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    //XChange
+    // XChange
     implementation 'org.knowm.xchange:xchange-core:5.0.12'
     implementation 'org.knowm.xchange:xchange-parent:5.0.12'
     implementation 'org.knowm.xchange:xchange-ascendex:5.0.12'
     implementation 'org.knowm.xchange:xchange-ftx:5.0.12'
     implementation 'org.knowm.xchange:xchange-kucoin:5.0.12'
     implementation 'org.knowm.xchange:xchange-binance:5.0.12'
+    implementation 'org.knowm.xchange:xchange-gateio:5.0.12'
+    implementation 'org.knowm.xchange:xchange-huobi:5.0.12'
+    implementation "io.gate:gate-api:6.23.0"
+
 }

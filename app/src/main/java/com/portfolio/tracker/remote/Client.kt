@@ -20,8 +20,4 @@ object Client {
             .client(client)
             .build()
     }
-
-    fun getBinanceApi(): AccountApi = retrofit.create(AccountApi::class.java)
-
-    fun getBybitApi(): BybitApi = retrofit.create(BybitApi::class.java)
 }
