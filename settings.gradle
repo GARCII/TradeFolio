@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "TradeFolio"
 include ':app'
+include ':Binance'
