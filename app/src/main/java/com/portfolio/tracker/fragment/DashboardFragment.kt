@@ -33,12 +33,18 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         button.setOnClickListener {
-            //exchangeViewModel.fetchGateioData()
-            exchangeViewModel.fetchAscendexData()
-            exchangeViewModel.fetchBinanceData()
-            exchangeViewModel.fetchFtxData()
-            exchangeViewModel.fetchHuobiData()
-            exchangeViewModel.fetchKucoinData()
+            exchangeViewModel.apply {
+                fetchGateioData()
+                fetchAscendexData()
+                fetchBinanceData()
+                fetchFtxData()
+                fetchHuobiData()
+                fetchKucoinData()
+                fetchKrakenData()
+                fetchBittrexData()
+                fetchOkexData()
+                fetchCoinbaseData()
+            }
         }
 
         exchangeViewModel.balanceData.observe(requireActivity(), {
