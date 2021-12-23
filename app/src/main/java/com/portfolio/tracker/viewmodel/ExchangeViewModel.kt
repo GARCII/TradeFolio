@@ -15,8 +15,12 @@ import io.gate.gateapi.api.SpotApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.knowm.xchange.bitfinex.dto.BitfinexException
+import org.knowm.xchange.bitfinex.v2.dto.BitfinexExceptionV2
+import org.knowm.xchange.bitmex.BitmexException
 import org.knowm.xchange.bittrex.dto.BittrexException
 import org.knowm.xchange.coinbase.dto.CoinbaseException
+import org.knowm.xchange.deribit.v2.dto.DeribitException
 import org.knowm.xchange.dto.account.Wallet
 import org.knowm.xchange.exceptions.ExchangeException
 import org.knowm.xchange.okex.v5.dto.OkexException
@@ -129,6 +133,42 @@ internal class ExchangeViewModel : ViewModel() {
                 val accountService = exchange.accountService
                 balanceData.postValue(accountService.accountInfo.wallets)
             } catch (e: CoinbaseException) {
+                loadingState.postValue(LoadingState.error("${e.message}"))
+            }
+        }
+    }
+
+    fun fetchBitfinexData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val exchange = ExchangeUtils.getBitfinexExchange()
+                val accountService = exchange.accountService
+                balanceData.postValue(accountService.accountInfo.wallets)
+            } catch (e: BitfinexException) {
+                loadingState.postValue(LoadingState.error("${e.message}"))
+            }
+        }
+    }
+
+    fun fetchBitmexData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val exchange = ExchangeUtils.getBitmexExchange()
+                val accountService = exchange.accountService
+                balanceData.postValue(accountService.accountInfo.wallets)
+            } catch (e: BitmexException) {
+                loadingState.postValue(LoadingState.error("${e.message}"))
+            }
+        }
+    }
+
+    fun fetchDeribitData() {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val exchange = ExchangeUtils.getDeribitExchange()
+                val accountService = exchange.accountService
+                balanceData.postValue(accountService.accountInfo.wallets)
+            } catch (e: DeribitException) {
                 loadingState.postValue(LoadingState.error("${e.message}"))
             }
         }

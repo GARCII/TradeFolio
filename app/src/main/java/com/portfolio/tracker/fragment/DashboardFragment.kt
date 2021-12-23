@@ -43,13 +43,16 @@ class DashboardFragment : Fragment() {
                 fetchKrakenData()
                 fetchBittrexData()
                 fetchOkexData()
-                fetchCoinbaseData()
+                //fetchCoinbaseData() // Disabled for 48H
+                //fetchBitfinexData()
+                fetchBitmexData()
+                fetchDeribitData()
             }
         }
 
         exchangeViewModel.balanceData.observe(requireActivity(), {
             it.keys.forEach { keyWallet ->
-                Log.e("ASSET_TICKER","${it[keyWallet]?.getBalance(Currency.USDT)}")
+                Log.e("ASSET_TICKER","${it[keyWallet]?.name}")
             }
         })
     }

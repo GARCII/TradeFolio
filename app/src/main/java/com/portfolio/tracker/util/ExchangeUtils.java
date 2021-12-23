@@ -5,8 +5,11 @@ import org.knowm.xchange.ExchangeFactory;
 import org.knowm.xchange.ExchangeSpecification;
 import org.knowm.xchange.ascendex.AscendexExchange;
 import org.knowm.xchange.binance.BinanceExchange;
+import org.knowm.xchange.bitfinex.BitfinexExchange;
+import org.knowm.xchange.bitmex.BitmexExchange;
 import org.knowm.xchange.bittrex.BittrexExchange;
 import org.knowm.xchange.coinbase.v2.CoinbaseExchange;
+import org.knowm.xchange.deribit.v2.DeribitExchange;
 import org.knowm.xchange.ftx.FtxExchange;
 import org.knowm.xchange.gateio.GateioExchange;
 import org.knowm.xchange.huobi.HuobiExchange;
@@ -88,6 +91,28 @@ public class ExchangeUtils {
         ExchangeSpecification spec = new ExchangeSpecification(CoinbaseExchange.class);
         spec.setApiKey(ConstantsKt.COINBASE_API_KEY);
         spec.setSecretKey(ConstantsKt.COINBASE_API_SECRET);
+        return ExchangeFactory.INSTANCE.createExchange(spec);
+    }
+
+    //TODO Runtime exception "Ticker not valid"
+    public static Exchange getBitfinexExchange() {
+        ExchangeSpecification spec = new ExchangeSpecification(BitfinexExchange.class);
+        spec.setApiKey(ConstantsKt.BITFINEX_API_KEY);
+        spec.setSecretKey(ConstantsKt.BITTREX_API_SECRET);
+        return ExchangeFactory.INSTANCE.createExchange(spec);
+    }
+
+    public static Exchange getBitmexExchange() {
+        ExchangeSpecification spec = new ExchangeSpecification(BitmexExchange.class);
+        spec.setApiKey(ConstantsKt.BITMEX_API_KEY);
+        spec.setSecretKey(ConstantsKt.BITMEX_API_SECRET);
+        return ExchangeFactory.INSTANCE.createExchange(spec);
+    }
+
+    public static Exchange getDeribitExchange() {
+        ExchangeSpecification spec = new ExchangeSpecification(DeribitExchange.class);
+        spec.setApiKey(ConstantsKt.DERIBIT_API_KEY);
+        spec.setSecretKey(ConstantsKt.DERIBIT_API_SECRET);
         return ExchangeFactory.INSTANCE.createExchange(spec);
     }
 }
