@@ -7,8 +7,8 @@
     tools:context=".activity.ConnectExchangeActivity">
 
     <LinearLayout
-        android:layout_width="@dimen/tf_ic_medium"
-        android:layout_height="@dimen/tf_ic_medium"
+        android:layout_width="@dimen/tf_ic_big"
+        android:layout_height="@dimen/tf_ic_big"
         android:orientation="horizontal">
 
         <ImageView

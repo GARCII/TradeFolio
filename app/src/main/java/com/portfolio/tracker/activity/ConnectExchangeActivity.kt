@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.widget.Toast
 import com.portfolio.tracker.R
 import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.util.TradeFolioSharedPreferencesUtils
@@ -48,7 +48,11 @@ class ConnectExchangeActivity : AppCompatActivity() {
         button_get_data.setOnClickListener {
             val apiKeyPref = sharedPreferencesUtils.getString(exchange.getApiPrefKey())
             val secretKeyPref = sharedPreferencesUtils.getString(exchange.getSecretPrefKey())
-            Log.e("TEST", "$apiKeyPref $secretKeyPref")
+            Toast.makeText(
+                this@ConnectExchangeActivity,
+                "ApiKey : $apiKeyPref / SecretKey : $secretKeyPref",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 }

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.R
 import com.portfolio.tracker.activity.ConnectExchangeActivity
+import com.portfolio.tracker.activity.ExchangeListActivity
 import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 import kotlinx.android.synthetic.main.fragment_account.*
@@ -50,9 +51,9 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        button_connect_exchange.setOnClickListener {
+        button_list_exchange.setOnClickListener {
             activity?.let { activity ->
-                ConnectExchangeActivity.launchActivity(activity, ExchangeType.FTX)
+                ExchangeListActivity.launchActivity(activity)
             }
         }
 

@@ -4,7 +4,7 @@
     <string name="tf_exchange_name_binance">Binance</string>
     <string name="tf_exchange_name_ftx">FTX</string>
     <string name="tf_exchange_name_huobi">Huobi</string>
-    <string name="tf_exchange_name_deribit">deribit</string>
+    <string name="tf_exchange_name_deribit">Deribit</string>
     <string name="tf_exchange_name_coinbase">Coinbase</string>
     <string name="tf_exchange_name_bitmex">Bitmex</string>
     <string name="tf_exchange_name_bittrex">Bittrex</string>
@@ -24,4 +24,5 @@
     <string name="tf_new_portfolio">New Portfolio : %s</string>
     <string name="tf_connect">Connect</string>
     <string name="tf_synchronize">Synchronize</string>
+    <string name="tf_exchange_list">Exchanges</string>
 </resources>

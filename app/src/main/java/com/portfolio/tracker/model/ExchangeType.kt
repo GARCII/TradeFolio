@@ -64,22 +64,18 @@ enum class ExchangeType {
     fun getResourceId(context: Context) = when (this) {
         FTX -> R.drawable.ftx
         BINANCE -> R.drawable.binance
-        DERIBIT -> -1
+        DERIBIT -> R.drawable.deribit
         ASCENDEX -> R.drawable.ascendex
-        GATE_IO -> -1
-        HUOBI -> -1
-        KRAKEN -> -1
-        OKEX -> -1
-        COINBASE -> -1
-        BITFINEX -> -1
+        GATE_IO -> R.drawable.gateio
+        HUOBI -> R.drawable.huobi
+        KRAKEN -> R.drawable.kraken
+        OKEX -> R.drawable.okex
+        COINBASE -> R.drawable.coinbase
+        BITFINEX -> R.drawable.bitfinex
         BITMEX -> R.drawable.bitmex
         BITTREX -> R.drawable.bittrex
-        CRYPTO_COM -> -1
+        CRYPTO_COM -> R.drawable.cryptocom
     }.let {
         ContextCompat.getDrawable(context, it)
-    }
-
-    companion object {
-
     }
 }
