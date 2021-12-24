@@ -1,5 +1,27 @@
 <resources>
     <string name="app_name">TradeFolio</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="tf_exchange_name_binance">Binance</string>
+    <string name="tf_exchange_name_ftx">FTX</string>
+    <string name="tf_exchange_name_huobi">Huobi</string>
+    <string name="tf_exchange_name_deribit">deribit</string>
+    <string name="tf_exchange_name_coinbase">Coinbase</string>
+    <string name="tf_exchange_name_bitmex">Bitmex</string>
+    <string name="tf_exchange_name_bittrex">Bittrex</string>
+    <string name="tf_exchange_name_bitfinex">Bitfinex</string>
+    <string name="tf_exchange_name_gate_io">Gate.io</string>
+    <string name="tf_exchange_name_okex">Okex</string>
+    <string name="tf_exchange_name_kraken">Kraken</string>
+    <string name="tf_exchange_name_crypto_com">Crypto.com</string>
+    <string name="tf_exchange_name_ascendex">Ascendex</string>
+
+    <string name="tf_ok">OK</string>
+    <string name="tf_cancel">Cancel</string>
+    <string name="tf_submit">Submit</string>
+    <string name="tf_hint">Enter here</string>
+    <string name="tf_api_key">API Key</string>
+    <string name="tf_secret_key">API Secret</string>
+    <string name="tf_new_portfolio">New Portfolio : %s</string>
+    <string name="tf_connect">Connect</string>
+    <string name="tf_synchronize">Synchronize</string>
 </resources>

@@ -98,7 +98,7 @@ public class ExchangeUtils {
     public static Exchange getBitfinexExchange() {
         ExchangeSpecification spec = new ExchangeSpecification(BitfinexExchange.class);
         spec.setApiKey(ConstantsKt.BITFINEX_API_KEY);
-        spec.setSecretKey(ConstantsKt.BITTREX_API_SECRET);
+        spec.setSecretKey(ConstantsKt.BITFINEX_API_SECRET);
         return ExchangeFactory.INSTANCE.createExchange(spec);
     }
 

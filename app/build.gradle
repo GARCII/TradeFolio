@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.portfolio.tracker"
-        minSdk 20
+        minSdk 23
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -57,26 +57,26 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
 
-    implementation group: 'commons-codec', name: 'commons-codec', version: '1.7'
-    implementation 'com.gruelbox:kucoin-java-sdk:2.0.0'
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.security:security-crypto:1.0.0"
 
-    // XChange
-    implementation 'org.knowm.xchange:xchange-core:5.0.12'
-    implementation 'org.knowm.xchange:xchange-parent:5.0.12'
-    implementation 'org.knowm.xchange:xchange-ascendex:5.0.12'
-    implementation 'org.knowm.xchange:xchange-ftx:5.0.12'
-    implementation 'org.knowm.xchange:xchange-kucoin:5.0.12'
-    implementation 'org.knowm.xchange:xchange-binance:5.0.12'
-    implementation 'org.knowm.xchange:xchange-gateio:5.0.12'
-    implementation 'org.knowm.xchange:xchange-huobi:5.0.12'
-    implementation 'org.knowm.xchange:xchange-kraken:5.0.12'
-    implementation 'org.knowm.xchange:xchange-bittrex:5.0.12'
-    implementation 'org.knowm.xchange:xchange-okex:5.0.12'
-    implementation 'org.knowm.xchange:xchange-coinbase:5.0.12'
-    implementation 'org.knowm.xchange:xchange-bitfinex:5.0.12'
-    implementation 'org.knowm.xchange:xchange-bitmex:5.0.12'
-    implementation 'org.knowm.xchange:xchange-deribit:5.0.12'
-    implementation "io.gate:gate-api:6.23.0"
+    // XChange SDK
+    implementation "org.knowm.xchange:xchange-core:$xchange_version"
+    implementation "org.knowm.xchange:xchange-parent:$xchange_version"
+    implementation "org.knowm.xchange:xchange-ascendex:$xchange_version"
+    implementation "org.knowm.xchange:xchange-ftx:$xchange_version"
+    implementation "org.knowm.xchange:xchange-kucoin:$xchange_version"
+    implementation "org.knowm.xchange:xchange-binance:$xchange_version"
+    implementation "org.knowm.xchange:xchange-gateio:$xchange_version"
+    implementation "org.knowm.xchange:xchange-huobi:$xchange_version"
+    implementation "org.knowm.xchange:xchange-kraken:$xchange_version"
+    implementation "org.knowm.xchange:xchange-bittrex:$xchange_version"
+    implementation "org.knowm.xchange:xchange-okex:$xchange_version"
+    implementation "org.knowm.xchange:xchange-coinbase:$xchange_version"
+    implementation "org.knowm.xchange:xchange-bitfinex:$xchange_version"
+    implementation "org.knowm.xchange:xchange-bitmex:$xchange_version"
+    implementation "org.knowm.xchange:xchange-deribit:$xchange_version"
 
+    //Gate.io SDK
+    implementation "io.gate:gate-api:$gat_io_version"
 }

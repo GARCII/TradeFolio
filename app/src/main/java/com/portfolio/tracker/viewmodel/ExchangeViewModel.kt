@@ -3,7 +3,6 @@ package com.portfolio.tracker.viewmodel
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.kucoin.sdk.exception.KucoinApiException
 import com.portfolio.tracker.util.ExchangeUtils
 import com.portfolio.tracker.util.GATE_API_KEY
 import com.portfolio.tracker.util.GATE_API_SECRET
@@ -15,14 +14,17 @@ import io.gate.gateapi.api.SpotApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.knowm.xchange.ascendex.AscendexException
+import org.knowm.xchange.binance.dto.BinanceException
 import org.knowm.xchange.bitfinex.dto.BitfinexException
-import org.knowm.xchange.bitfinex.v2.dto.BitfinexExceptionV2
 import org.knowm.xchange.bitmex.BitmexException
 import org.knowm.xchange.bittrex.dto.BittrexException
 import org.knowm.xchange.coinbase.dto.CoinbaseException
 import org.knowm.xchange.deribit.v2.dto.DeribitException
 import org.knowm.xchange.dto.account.Wallet
 import org.knowm.xchange.exceptions.ExchangeException
+import org.knowm.xchange.ftx.FtxException
+import org.knowm.xchange.kucoin.service.KucoinApiException
 import org.knowm.xchange.okex.v5.dto.OkexException
 
 internal class ExchangeViewModel : ViewModel() {
@@ -36,7 +38,7 @@ internal class ExchangeViewModel : ViewModel() {
                 val exchange = ExchangeUtils.getBinanceExchange()
                 val accountService = exchange.accountService
                 balanceData.postValue(accountService.accountInfo.wallets)
-            } catch (e: KucoinApiException) {
+            } catch (e: BinanceException) {
                 loadingState.postValue(LoadingState.error("error_message"))
             }
         }
@@ -48,7 +50,7 @@ internal class ExchangeViewModel : ViewModel() {
                 val exchange = ExchangeUtils.getHuobiExchange()
                 val accountService = exchange.accountService
                 balanceData.postValue(accountService.accountInfo.wallets)
-            } catch (e: KucoinApiException) {
+            } catch (e: ExchangeException) {
                 loadingState.postValue(LoadingState.error("error_message"))
             }
         }
@@ -60,7 +62,7 @@ internal class ExchangeViewModel : ViewModel() {
                 val exchange = ExchangeUtils.getFtxExchange()
                 val accountService = exchange.accountService
                 balanceData.postValue(accountService.accountInfo.wallets)
-            } catch (e: KucoinApiException) {
+            } catch (e: FtxException) {
                 loadingState.postValue(LoadingState.error("error_message"))
             }
         }
@@ -72,7 +74,7 @@ internal class ExchangeViewModel : ViewModel() {
                 val exchange = ExchangeUtils.getAscendexExchange()
                 val accountService = exchange.accountService
                 balanceData.postValue(accountService.accountInfo.wallets)
-            } catch (e: KucoinApiException) {
+            } catch (e: AscendexException) {
                 loadingState.postValue(LoadingState.error("error_message"))
             }
         }

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tf_margin_eigth">2dp</dimen>
+    <dimen name="tf_margin_quarter">4dp</dimen>
+    <dimen name="tf_margin_half">8dp</dimen>
+    <dimen name="tf_margin_medium">12dp</dimen>
+    <dimen name="tf_margin">16dp</dimen>
+    <dimen name="tf_margin_double">32dp</dimen>
+
+    <dimen name="tf_text_very_small">10sp</dimen>
+    <dimen name="tf_text_small">12sp</dimen>
+    <dimen name="tf_text_normal">14sp</dimen>
+    <dimen name="tf_text_medium">18sp</dimen>
+    <dimen name="tf_text_big">20sp</dimen>
+    <dimen name="tf_text_xbig">24sp</dimen>
+    <dimen name="tf_text_xxbig">32sp</dimen>
+    <dimen name="tf_text_xxxbig">46sp</dimen>
+
+    <dimen name="tf_ic_small">18dp</dimen>
+    <dimen name="tf_ic_medium">26dp</dimen>
+    <dimen name="tf_ic_big">34dp</dimen>
+    <dimen name="tf_ic_xbig">42dp</dimen>
+    <dimen name="tf_ic_xxbig">50dp</dimen>
+
+    <dimen name="tf_separator_stroke">1dp</dimen>
+    <dimen name="tf_default_gauge_stroke">5dp</dimen>
+    <dimen name="tf_default_gauge_image_stroke">8dp</dimen>
+</resources>

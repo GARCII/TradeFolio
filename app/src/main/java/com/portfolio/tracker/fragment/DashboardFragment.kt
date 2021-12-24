@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.R
+import com.portfolio.tracker.activity.ConnectExchangeActivity
+import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 import kotlinx.android.synthetic.main.fragment_account.*
-
-import org.knowm.xchange.currency.Currency
 
 
 class DashboardFragment : Fragment() {
@@ -32,7 +32,7 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button.setOnClickListener {
+        button_synchronize.setOnClickListener {
             exchangeViewModel.apply {
                 fetchGateioData()
                 fetchAscendexData()
@@ -47,6 +47,12 @@ class DashboardFragment : Fragment() {
                 //fetchBitfinexData()
                 fetchBitmexData()
                 fetchDeribitData()
+            }
+        }
+
+        button_connect_exchange.setOnClickListener {
+            activity?.let { activity ->
+                ConnectExchangeActivity.launchActivity(activity, ExchangeType.FTX)
             }
         }
 
