@@ -18,10 +18,10 @@ object ConnectUtils {
                 apiKey = sharedPreferencesUtils.getString(exchangeType.getApiPrefKey())
                 secretKey = sharedPreferencesUtils.getString(exchangeType.getSecretPrefKey())
                 exchangeType.getSpecificParamItem()?.let { parameter ->
-                    val key = parameter.getKey()
+                    val key = parameter.getHeaderParam()
                     setExchangeSpecificParametersItem(
                         key,
-                        sharedPreferencesUtils.getString(key)
+                        sharedPreferencesUtils.getString(parameter.getPrefKey(exchangeType))
                     )
                 }
             }

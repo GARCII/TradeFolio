@@ -29,4 +29,6 @@
     <string name="tf_exchange_list">Exchanges</string>
     <string name="tf_exchange_param_account_group">Account group</string>
     <string name="tf_exchange_param_passphrase">Passphrase</string>
+    <string name="tf_error_message">An error occurred during the request, please retry later.</string>
+
 </resources>

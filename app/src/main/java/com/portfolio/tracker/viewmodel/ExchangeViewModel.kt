@@ -18,52 +18,62 @@ import org.knowm.xchange.binance.dto.BinanceException
 import org.knowm.xchange.bitmex.BitmexException
 import org.knowm.xchange.bittrex.dto.BittrexException
 import org.knowm.xchange.coinbase.dto.CoinbaseException
-import org.knowm.xchange.currency.Currency
 import org.knowm.xchange.deribit.v2.dto.DeribitException
 import org.knowm.xchange.dto.account.Wallet
 import org.knowm.xchange.exceptions.ExchangeException
 import org.knowm.xchange.ftx.FtxException
 import org.knowm.xchange.kucoin.service.KucoinApiException
 import org.knowm.xchange.okex.v5.dto.OkexException
+import java.io.IOException
 
 internal class ExchangeViewModel : ViewModel() {
 
     val loadingState = MutableLiveData<LoadingState>()
-    val balanceData = MutableLiveData<Map<String, Wallet>>()
+    val data = MutableLiveData<Map<String, Wallet>>()
 
-    fun synchronizeXChangeExchange(context: Context, exchangeType: ExchangeType) {
+    fun connectPortfolio(context: Context, exchangeType: ExchangeType) {
+        when (exchangeType) {
+            ExchangeType.GATE_IO -> connectGateio(context)
+            else -> connectXchange(context, exchangeType)
+        }
+    }
+
+    private fun connectXchange(context: Context, exchangeType: ExchangeType) {
+        loadingState.postValue(LoadingState.LOADING)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val exchange = ConnectUtils.getExchange(context, exchangeType)
                 exchange?.let {
-                    val accountService = it.accountService
-                    balanceData.postValue(accountService.accountInfo.wallets)
-                }
+                    data.postValue(it.accountService.accountInfo.wallets)
+                    loadingState.postValue(LoadingState.LOADED)
+                } ?: loadingState.postValue(LoadingState.error("Exchange not found"))
             } catch (e: AscendexException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: BinanceException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: BitmexException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: BittrexException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: CoinbaseException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: DeribitException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: FtxException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: KucoinApiException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: OkexException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             } catch (e: ExchangeException) {
-                loadingState.postValue(LoadingState.error("error_message ${e.message}"))
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
+            } catch (e: IOException) {
+                loadingState.postValue(LoadingState.error("${e.stackTrace} ${e.message}"))
             }
         }
     }
 
-    fun synchronizeGateiO(context: Context) {
+    private fun connectGateio(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             val apiClient = Configuration.getDefaultApiClient()
             val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(context)
@@ -73,7 +83,8 @@ internal class ExchangeViewModel : ViewModel() {
             apiClient.setApiKeySecret(apiKey, secretKey)
             val apiInstance = SpotApi(apiClient)
             try {
-                val result = apiInstance.listSpotAccounts().currency(Currency.USDT.displayName).execute()
+                val result =
+                    apiInstance.listSpotAccounts().currency("usdt").execute()
                 result.forEach {
                     Log.e("Gate.io", "${it.available}")
                 }

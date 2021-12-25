@@ -20,7 +20,8 @@ enum class ExchangeType {
     FTX, BINANCE, DERIBIT, KUCOIN, ASCENDEX, GATE_IO, HUOBI, KRAKEN, OKEX, COINBASE, BITFINEX, BITMEX, BITTREX, CRYPTO_COM;
 
     companion object {
-        fun sanitizeExchanges() = values().toList().filter { it.isSyncAuthorized() }.sortedBy { it.name }
+        fun sanitizeExchanges() =
+            values().toList().filter { it.isSyncAuthorized() }.sortedBy { it.name }
     }
 
     fun getName(context: Context) = when (this) {
@@ -98,17 +99,24 @@ enum class ExchangeType {
     }
 
     fun isSyncAuthorized() = when (this) {
-        FTX, BINANCE, DERIBIT, KUCOIN, ASCENDEX, GATE_IO, HUOBI, OKEX, BITMEX, BITTREX -> true
-        KRAKEN, COINBASE, BITFINEX, CRYPTO_COM -> false
+        KUCOIN, GATE_IO, HUOBI, OKEX, COINBASE, BINANCE, FTX, ASCENDEX, DERIBIT, BITMEX, BITTREX -> true
+        KRAKEN, BITFINEX, CRYPTO_COM -> false
     }
 }
 
 enum class SpecificExchangeParamType {
     ACCOUNT_GROUP, PASSPHRASE;
 
-    fun getKey() = when (this) {
+    fun getHeaderParam() = when (this) {
         ACCOUNT_GROUP -> "account-group"
         PASSPHRASE -> "passphrase"
+    }
+
+    fun getPrefKey(exchangeType: ExchangeType) = when (this) {
+        ACCOUNT_GROUP -> "account-group"
+        PASSPHRASE -> "passphrase"
+    }.let {
+        "${exchangeType.name}_$it"
     }
 
     fun getHint(context: Context) = when (this) {

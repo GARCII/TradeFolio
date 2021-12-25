@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.ConnectExchangeActivity">
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:padding="@dimen/tf_margin"
+        android:layout_marginBottom="@dimen/tf_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image_view_exchange_icon"
+            android:layout_width="@dimen/tf_ic_xbig"
+            android:layout_height="@dimen/tf_ic_xbig"
+            android:contentDescription="@string/tf_ok"
+            android:layout_marginEnd="@dimen/tf_margin"/>
+
+        <TextView
+            android:layout_gravity="center"
+            android:id="@+id/text_view_exchange_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/tf_margin">
+
+        <EditText
+            android:id="@+id/edit_text_api_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tf_margin_double"
+            android:autofillHints="name"
+            android:ems="10"
+            android:hint="@string/tf_api_key"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edit_text_secret_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tf_margin_double"
+            android:autofillHints="name"
+            android:ems="10"
+            android:hint="@string/tf_secret_key"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/edit_text_specific_exchange_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tf_margin_double"
+            android:autofillHints="name"
+            android:ems="10"
+            android:visibility="gone"
+            android:hint="@string/tf_passphrase"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/button_connect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/tf_margin_double"
+            android:layout_marginEnd="@dimen/tf_margin_double"
+            android:text="@string/tf_submit" />
+
+        <Button
+            android:id="@+id/button_get_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/tf_margin_double"
+            android:layout_marginEnd="@dimen/tf_margin_double"
+            android:text="@string/tf_ok" />
+    </LinearLayout>
+    </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progress_circular"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+</FrameLayout>

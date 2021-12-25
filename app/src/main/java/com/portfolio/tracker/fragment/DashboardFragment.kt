@@ -6,27 +6,31 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.R
 import com.portfolio.tracker.activity.ExchangeListActivity
 import com.portfolio.tracker.model.ExchangeType
+import com.portfolio.tracker.util.LoadingState
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
-import kotlinx.android.synthetic.main.fragment_account.*
+import kotlinx.android.synthetic.main.fragment_connect_exchange.progress_circular
+import kotlinx.android.synthetic.main.fragment_dashboard.*
+import org.knowm.xchange.currency.Currency
 
 
 class DashboardFragment : Fragment() {
-    private lateinit var exchangeViewModel: ExchangeViewModel
+    private lateinit var viewModel: ExchangeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = inflater.inflate(R.layout.fragment_account, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!this::exchangeViewModel.isInitialized) {
-            exchangeViewModel = ViewModelProvider(this).get(ExchangeViewModel::class.java)
+        if (!this::viewModel.isInitialized) {
+            viewModel = ViewModelProvider(this).get(ExchangeViewModel::class.java)
         }
     }
 
@@ -35,11 +39,7 @@ class DashboardFragment : Fragment() {
         button_synchronize.setOnClickListener {
 
             ExchangeType.sanitizeExchanges().forEach { exchange ->
-                exchangeViewModel.synchronizeXChangeExchange(requireContext(), exchange)
-            }
-
-            exchangeViewModel.apply {
-                synchronizeGateiO(requireContext())
+                viewModel.connectPortfolio(requireContext(), exchange)
             }
         }
 
@@ -49,11 +49,31 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        exchangeViewModel.balanceData.observe(requireActivity(), {
-            it.keys.forEach { keyWallet ->
-                Log.e("ASSET_TICKER", "${it[keyWallet]?.name}")
+        viewModel.loadingState.observe(viewLifecycleOwner, {
+            manageLoading(it)
+        })
+
+        viewModel.data.observe(requireActivity(), {
+            it.entries.forEach { entry ->
+                Log.e("Wallet", "${entry.value.getBalance(Currency.USDT).total}")
             }
         })
+    }
+
+    /**
+     * Manage visibilities of views depending on loading status
+     */
+    private fun manageLoading(loadingState: LoadingState) {
+        when (loadingState.status) {
+            LoadingState.Status.LOADING -> progress_circular.visibility = View.VISIBLE
+            LoadingState.Status.SUCCESS -> progress_circular.visibility = View.INVISIBLE
+            LoadingState.Status.ERROR -> {
+                progress_circular.visibility = View.INVISIBLE
+                loadingState.msg?.let {
+                    Log.e("Wallet", it)
+                }
+            }
+        }
     }
 
     companion object {
