@@ -195,5 +195,10 @@ internal class ExchangeViewModel : ViewModel() {
             }
         }
     }
+
+    fun fetchBybitData() {
+        CoroutineScope(Dispatchers.IO).launch {
+        }
+    }
 }
 

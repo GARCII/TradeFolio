@@ -51,6 +51,17 @@
             android:hint="@string/tf_secret_key"
             android:inputType="text" />
 
+        <EditText
+            android:id="@+id/edit_text_specific_exchange_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/tf_margin_double"
+            android:autofillHints="name"
+            android:ems="10"
+            android:visibility="gone"
+            android:hint="@string/tf_passphrase"
+            android:inputType="text" />
+
         <Button
             android:id="@+id/button_connect"
             android:layout_width="match_parent"

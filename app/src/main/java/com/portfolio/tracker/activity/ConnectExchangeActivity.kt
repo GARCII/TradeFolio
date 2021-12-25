@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.portfolio.tracker.R
 import com.portfolio.tracker.model.ExchangeType
@@ -33,6 +34,14 @@ class ConnectExchangeActivity : AppCompatActivity() {
 
         val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(this)
         val exchange = intent.getSerializableExtra(EXCHANGE_ID_EXTRA) as ExchangeType
+
+        exchange.getSpecificParamItem()?.let {
+            edit_text_specific_exchange_item.apply {
+                visibility = View.VISIBLE
+                hint = it.getHint(this@ConnectExchangeActivity)
+            }
+        }
+
         text_view_exchange_name.text = exchange.getName(this)
         image_view_exchange_icon.setImageDrawable(exchange.getResourceId(this))
 

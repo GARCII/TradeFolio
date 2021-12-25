@@ -17,6 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:textColor="@color/white"
-        android:textSize="@dimen/tf_text_xxbig"
+        android:textSize="@dimen/tf_text_xbig"
         android:textStyle="bold" />
 </LinearLayout>
