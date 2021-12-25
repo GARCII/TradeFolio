@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.portfolio.tracker.R
@@ -35,10 +36,10 @@ class ConnectExchangeActivity : AppCompatActivity() {
         val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(this)
         val exchange = intent.getSerializableExtra(EXCHANGE_ID_EXTRA) as ExchangeType
 
-        exchange.getSpecificParamItem()?.let {
+        exchange.getSpecificParamItem()?.let { specific ->
             edit_text_specific_exchange_item.apply {
                 visibility = View.VISIBLE
-                hint = it.getHint(this@ConnectExchangeActivity)
+                hint = specific.getHint(this@ConnectExchangeActivity)
             }
         }
 
@@ -48,15 +49,24 @@ class ConnectExchangeActivity : AppCompatActivity() {
         button_connect.setOnClickListener {
             val apiKey = edit_text_api_key.text.toString()
             val secretKey = edit_text_secret_key.text.toString()
+            val specificParam = edit_text_specific_exchange_item.text.toString()
             sharedPreferencesUtils.apply {
                 setString(exchange.getApiPrefKey(), apiKey)
                 setString(exchange.getSecretPrefKey(), secretKey)
+                exchange.getSpecificParamItem()?.let { specific ->
+                    setString(specific.getKey(), specificParam)
+                }
             }
         }
 
         button_get_data.setOnClickListener {
             val apiKeyPref = sharedPreferencesUtils.getString(exchange.getApiPrefKey())
             val secretKeyPref = sharedPreferencesUtils.getString(exchange.getSecretPrefKey())
+            exchange.getSpecificParamItem()?.let {
+                val specificationPref = sharedPreferencesUtils.getString(it.getKey())
+                Log.e("TEST", "Specification : $specificationPref")
+
+            }
             Toast.makeText(
                 this@ConnectExchangeActivity,
                 "ApiKey : $apiKeyPref / SecretKey : $secretKeyPref",

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.R
-import com.portfolio.tracker.activity.ConnectExchangeActivity
 import com.portfolio.tracker.activity.ExchangeListActivity
 import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
@@ -27,27 +26,20 @@ class DashboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!this::exchangeViewModel.isInitialized) {
-             exchangeViewModel = ViewModelProvider(this).get(ExchangeViewModel::class.java)
-         }
+            exchangeViewModel = ViewModelProvider(this).get(ExchangeViewModel::class.java)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         button_synchronize.setOnClickListener {
+
+            ExchangeType.sanitizeExchanges().forEach { exchange ->
+                exchangeViewModel.synchronizeXChangeExchange(requireContext(), exchange)
+            }
+
             exchangeViewModel.apply {
-                fetchGateioData()
-                fetchAscendexData()
-                fetchBinanceData()
-                fetchFtxData()
-                fetchHuobiData()
-                fetchKucoinData()
-                fetchKrakenData()
-                fetchBittrexData()
-                fetchOkexData()
-                //fetchCoinbaseData() // Disabled for 48H
-                //fetchBitfinexData()
-                fetchBitmexData()
-                fetchDeribitData()
+                synchronizeGateiO(requireContext())
             }
         }
 
@@ -59,7 +51,7 @@ class DashboardFragment : Fragment() {
 
         exchangeViewModel.balanceData.observe(requireActivity(), {
             it.keys.forEach { keyWallet ->
-                Log.e("ASSET_TICKER","${it[keyWallet]?.name}")
+                Log.e("ASSET_TICKER", "${it[keyWallet]?.name}")
             }
         })
     }

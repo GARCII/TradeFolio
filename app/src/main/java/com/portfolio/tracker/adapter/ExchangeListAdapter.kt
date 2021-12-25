@@ -22,10 +22,10 @@ class ExchangeListAdapter(
         return ExchangeViewHolder(view)
     }
 
-    override fun getItemCount() = ExchangeType.values().toList().size
+    override fun getItemCount() = ExchangeType.sanitizeExchanges().size
 
     override fun onBindViewHolder(parent: ExchangeViewHolder, position: Int) {
-        val exchangeList = ExchangeType.values().toList()
+        val exchangeList = ExchangeType.sanitizeExchanges()
         val exchange = exchangeList[position]
         parent.apply {
             bind(exchange)

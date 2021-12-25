@@ -3,10 +3,25 @@ package com.portfolio.tracker.model
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.portfolio.tracker.R
-import com.portfolio.tracker.util.ACCOUNT_FTX
+import org.knowm.xchange.ascendex.AscendexExchange
+import org.knowm.xchange.binance.BinanceExchange
+import org.knowm.xchange.bitfinex.BitfinexExchange
+import org.knowm.xchange.bitmex.BitmexExchange
+import org.knowm.xchange.bittrex.BittrexExchange
+import org.knowm.xchange.coinbase.v2.CoinbaseExchange
+import org.knowm.xchange.deribit.v2.DeribitExchange
+import org.knowm.xchange.ftx.FtxExchange
+import org.knowm.xchange.huobi.HuobiExchange
+import org.knowm.xchange.kraken.KrakenExchange
+import org.knowm.xchange.kucoin.KucoinExchange
+import org.knowm.xchange.okex.v5.OkexExchange
 
 enum class ExchangeType {
     FTX, BINANCE, DERIBIT, KUCOIN, ASCENDEX, GATE_IO, HUOBI, KRAKEN, OKEX, COINBASE, BITFINEX, BITMEX, BITTREX, CRYPTO_COM;
+
+    companion object {
+        fun sanitizeExchanges() = values().toList().filter { it.isSyncAuthorized() }.sortedBy { it.name }
+    }
 
     fun getName(context: Context) = when (this) {
         FTX -> R.string.tf_exchange_name_ftx
@@ -27,43 +42,9 @@ enum class ExchangeType {
         context.getString(it)
     }
 
-    fun getApiPrefKey() = when (this) {
-        FTX -> "ftx"
-        BINANCE -> "binance"
-        DERIBIT -> "deribit"
-        ASCENDEX -> "ascendex"
-        GATE_IO -> "gate_io"
-        HUOBI -> "huobi"
-        KRAKEN -> "kraken"
-        OKEX -> "okex"
-        COINBASE -> "coinbase"
-        BITFINEX -> "bitfinex"
-        BITMEX -> "bitmex"
-        BITTREX -> "bittrex"
-        CRYPTO_COM -> "crypto_com"
-        KUCOIN -> "kucoin"
-    }.let {
-        "${it}_api_key"
-    }
+    fun getApiPrefKey() = "${this.name}_api_key"
 
-    fun getSecretPrefKey() = when (this) {
-        FTX -> "ftx"
-        BINANCE -> "binance"
-        DERIBIT -> "deribit"
-        ASCENDEX -> "ascendex"
-        GATE_IO -> "gate_io"
-        HUOBI -> "huobi"
-        KRAKEN -> "kraken"
-        OKEX -> "okex"
-        COINBASE -> "coinbase"
-        BITFINEX -> "bitfinex"
-        BITMEX -> "bitmex"
-        BITTREX -> "bittrex"
-        CRYPTO_COM -> "crypto_com"
-        KUCOIN -> "kucoin"
-    }.let {
-        "${it}_secret_key"
-    }
+    fun getSecretPrefKey() = "${this.name}_secret_key"
 
     fun getResourceId(context: Context) = when (this) {
         FTX -> R.drawable.ftx
@@ -98,6 +79,27 @@ enum class ExchangeType {
         BITMEX,
         BITTREX,
         CRYPTO_COM -> null
+    }
+
+    fun getClassInstance() = when (this) {
+        FTX -> FtxExchange::class.java
+        BINANCE -> BinanceExchange::class.java
+        DERIBIT -> DeribitExchange::class.java
+        KUCOIN -> KucoinExchange::class.java
+        ASCENDEX -> AscendexExchange::class.java
+        HUOBI -> HuobiExchange::class.java
+        KRAKEN -> KrakenExchange::class.java
+        OKEX -> OkexExchange::class.java
+        COINBASE -> CoinbaseExchange::class.java
+        BITFINEX -> BitfinexExchange::class.java
+        BITMEX -> BitmexExchange::class.java
+        BITTREX -> BittrexExchange::class.java
+        GATE_IO, CRYPTO_COM -> null
+    }
+
+    fun isSyncAuthorized() = when (this) {
+        FTX, BINANCE, DERIBIT, KUCOIN, ASCENDEX, GATE_IO, HUOBI, OKEX, BITMEX, BITTREX -> true
+        KRAKEN, COINBASE, BITFINEX, CRYPTO_COM -> false
     }
 }
 
