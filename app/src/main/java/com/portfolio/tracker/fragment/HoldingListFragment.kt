@@ -41,10 +41,13 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
         }
 
         if (!this::viewModel.isInitialized) {
-            viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
+            viewModel = ViewModelProviders.of(
+                this,
+                ExchangeViewModel.ExchangeViewModelFactory(exchangeType)
+            ).get(ExchangeViewModel::class.java)
         }
         context?.let { context ->
-            viewModel.connectPortfolio(context, exchangeType)
+            viewModel.synchronize(context)
             viewModel.isExchangeConned.observe(requireActivity(), {
                 if (it && viewModel.isExchangeDisplayable()) {
                     view.recycler_view_holding_list.layoutManager =

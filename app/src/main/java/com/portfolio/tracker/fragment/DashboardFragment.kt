@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.portfolio.tracker.R
 import com.portfolio.tracker.activity.ExchangeListActivity
 import com.portfolio.tracker.activity.HoldingListActivity
@@ -30,23 +30,26 @@ class DashboardFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (!this::viewModel.isInitialized) {
-            viewModel = ViewModelProvider(this).get(ExchangeViewModel::class.java)
+            viewModel = ViewModelProviders.of(
+                this,
+                ExchangeViewModel.ExchangeViewModelFactory(ExchangeType.BINANCE)
+            ).get(ExchangeViewModel::class.java)
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        button_synchronize.setOnClickListener {
 
-            ExchangeType.sanitizeExchanges().forEach { exchange ->
-                viewModel.connectPortfolio(requireContext(), exchange)
-            }
+        button_synchronize.setOnClickListener {
+            viewModel.synchronize(requireContext())
         }
+
         button_list_exchange.setOnClickListener {
             activity?.let { activity ->
                 ExchangeListActivity.launchActivity(activity)
             }
         }
+
         button_list_holding.setOnClickListener {
             activity?.let { activity ->
                 HoldingListActivity.launchActivity(activity)

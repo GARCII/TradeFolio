@@ -51,7 +51,10 @@ class ConnectExchangeFragment : Fragment() {
             exchangeType = it.getSerializable(ARG_EXCHANGE_TYPE) as ExchangeType
         }
         if (!this::viewModel.isInitialized) {
-            viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
+            viewModel = ViewModelProviders.of(
+                this,
+                ExchangeViewModel.ExchangeViewModelFactory(exchangeType)
+            ).get(ExchangeViewModel::class.java)
         }
 
         val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(requireContext())
@@ -84,7 +87,7 @@ class ConnectExchangeFragment : Fragment() {
             if (Utils.isConnectedToNetwork(requireContext()) &&
                 !sharedPreferencesUtils.getString(exchangeType.getApiPrefKey()).isNullOrBlank() &&
                 !sharedPreferencesUtils.getString(exchangeType.getSecretPrefKey()).isNullOrBlank()) {
-                viewModel.connectPortfolio(requireContext(), exchangeType)
+                viewModel.synchronize(requireContext())
             } else {
                 Toast.makeText(
                     requireContext(),

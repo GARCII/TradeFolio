@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.model.*
 import com.portfolio.tracker.util.*
 import io.gate.gateapi.ApiException
@@ -29,27 +30,27 @@ import java.io.IOException
 import java.math.BigDecimal
 import java.util.*
 
-internal class ExchangeViewModel : ViewModel() {
+internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewModel() {
 
     val loadingState = MutableLiveData<LoadingState>()
     val data = MutableLiveData<Map<String, Wallet>>()
     val isExchangeConned = MutableLiveData<Boolean>()
     var portfolio: Portfolio? = null
 
-    fun connectPortfolio(context: Context, exchangeType: ExchangeType) {
+    fun synchronize(context: Context) {
         when (exchangeType) {
-            ExchangeType.GATE_IO -> connectGateio(context)
-            else -> connectXchange(context, exchangeType)
+            ExchangeType.GATE_IO -> synchronizeGateio(context)
+            else -> synchronizeXchange(context)
         }
     }
 
-    private fun connectXchange(context: Context, exchangeType: ExchangeType) {
+    private fun synchronizeXchange(context: Context) {
         loadingState.postValue(LoadingState.LOADING)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val exchange = ConnectUtils.getExchange(context, exchangeType)
                 exchange?.let {
-                    portfolio = buildPortfolioData(exchange, exchangeType)
+                    portfolio = buildPortfolioData(exchange)
                     isExchangeConned.postValue(true)
                     loadingState.postValue(LoadingState.LOADED)
                 } ?: run {
@@ -83,7 +84,7 @@ internal class ExchangeViewModel : ViewModel() {
         }
     }
 
-    private fun connectGateio(context: Context) {
+    private fun synchronizeGateio(context: Context) {
         CoroutineScope(Dispatchers.IO).launch {
             val apiClient = Configuration.getDefaultApiClient()
             val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(context)
@@ -124,7 +125,7 @@ internal class ExchangeViewModel : ViewModel() {
     }
 
     //TODO Refactoring / Configure balance limit
-    private fun buildPortfolioData(exchange: Exchange, exchangeType: ExchangeType): Portfolio {
+    private fun buildPortfolioData(exchange: Exchange): Portfolio {
         val walletsData = mutableListOf<WalletData>()
         val balances = mutableListOf<BalanceData>()
         exchange.accountService.accountInfo.wallets.entries.forEach {
@@ -168,6 +169,14 @@ internal class ExchangeViewModel : ViewModel() {
             exchangeType, Date(),
             walletsData
         )
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    class ExchangeViewModelFactory(private val exchangeType: ExchangeType) :
+        ViewModelProvider.NewInstanceFactory() {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return ExchangeViewModel(exchangeType) as T
+        }
     }
 }
 
