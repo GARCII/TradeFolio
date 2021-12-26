@@ -4,12 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="@dimen/tf_margin_half"
-    tools:context=".activity.ExchangeListActivity">
+    tools:context=".fragment.HoldingListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_holding_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/empty_balance_view"
+        layout="@layout/exchange_balance_empty_view"
+        android:visibility="gone" />
 
     <ProgressBar
         android:id="@+id/progress_circular"

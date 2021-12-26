@@ -15,6 +15,7 @@ import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.util.LoadingState
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 import kotlinx.android.synthetic.main.fragment_holding_list.*
+import kotlinx.android.synthetic.main.fragment_holding_list.view.*
 
 class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
 
@@ -26,11 +27,7 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_holding_list, container, false)
-    }
-
+    ): View = inflater.inflate(R.layout.fragment_holding_list, container, false)
 
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable(ARG_EXCHANGE_TYPE, exchangeType)
@@ -47,19 +44,22 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
             viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
         }
         context?.let { context ->
-            viewModel.apply {
-                connectPortfolio(context, exchangeType)
-                isExchangeConned.observe(requireActivity(), {
-                    if (it) {
-                        recycler_view_holding_list.layoutManager = LinearLayoutManager(context)
-                        adapter = HoldingListAdapter(context, this@HoldingListFragment, viewModel)
-                        recycler_view_holding_list.adapter = adapter
-                    }
-                })
-                loadingState.observe(viewLifecycleOwner, {
-                    manageLoading(it)
-                })
-            }
+            viewModel.connectPortfolio(context, exchangeType)
+            viewModel.isExchangeConned.observe(requireActivity(), {
+                if (it && viewModel.isExchangeDisplayable()) {
+                    view.recycler_view_holding_list.layoutManager =
+                        LinearLayoutManager(context)
+                    adapter = HoldingListAdapter(context, this, viewModel)
+                    view.recycler_view_holding_list.adapter = adapter
+                } else {
+                    view.recycler_view_holding_list.visibility = View.GONE
+                    view.empty_balance_view.visibility = View.VISIBLE
+                }
+            })
+            viewModel.loadingState.observe(viewLifecycleOwner, {
+                manageLoading(it)
+            })
+
         }
     }
 

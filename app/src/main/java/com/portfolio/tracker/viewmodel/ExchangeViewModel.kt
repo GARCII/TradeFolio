@@ -107,13 +107,20 @@ internal class ExchangeViewModel : ViewModel() {
         }
     }
 
-
     fun getHoldingList(): MutableSet<BalanceData> {
         val holdings = mutableSetOf<BalanceData>()
         portfolio?.wallets?.forEach {
-            holdings.addAll( it.balances)
+            holdings.addAll(it.balances)
         }
         return holdings.toSortedSet(compareBy { it.currency.displayName })
+    }
+
+    fun isExchangeDisplayable(): Boolean {
+        var count = 0
+        portfolio?.wallets?.forEach {
+            count += it.balances.size
+        }
+        return count > 0
     }
 
     //TODO Refactoring / Configure balance limit
