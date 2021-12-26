@@ -36,5 +36,7 @@
     <string name="tf_nav_settings">Settings</string>
     <string name="tf_nav_connect">Connect</string>
     <string name="tf_nav_portfolio">Portfolio</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

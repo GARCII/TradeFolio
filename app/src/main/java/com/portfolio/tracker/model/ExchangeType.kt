@@ -3,6 +3,7 @@ package com.portfolio.tracker.model
 import android.content.Context
 import androidx.core.content.ContextCompat
 import com.portfolio.tracker.R
+import com.portfolio.tracker.fragment.HoldingListFragment
 import org.knowm.xchange.ascendex.AscendexExchange
 import org.knowm.xchange.binance.BinanceExchange
 import org.knowm.xchange.bitfinex.BitfinexExchange
@@ -102,6 +103,8 @@ enum class ExchangeType {
         BINANCE, COINBASE, FTX, ASCENDEX, DERIBIT, BITMEX, BITTREX, KUCOIN, GATE_IO, OKEX, HUOBI -> true
         KRAKEN, BITFINEX, CRYPTO_COM -> false
     }
+
+    fun getFragment() = HoldingListFragment.newInstance(this)
 }
 
 enum class SpecificExchangeParamType {

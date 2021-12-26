@@ -20,6 +20,8 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
 
     private var adapter: HoldingListAdapter? = null
     private lateinit var viewModel: ExchangeViewModel
+    private lateinit var exchangeType: ExchangeType
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,14 +31,24 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
         return inflater.inflate(R.layout.fragment_holding_list, container, false)
     }
 
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putSerializable(ARG_EXCHANGE_TYPE, exchangeType)
+        super.onSaveInstanceState(outState)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        arguments?.let {
+            exchangeType = it.getSerializable(ARG_EXCHANGE_TYPE) as ExchangeType
+        }
+
         if (!this::viewModel.isInitialized) {
             viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
         }
         context?.let { context ->
             viewModel.apply {
-                connectPortfolio(context, ExchangeType.ASCENDEX)
+                connectPortfolio(context, exchangeType)
                 isExchangeConned.observe(requireActivity(), {
                     if (it) {
                         recycler_view_holding_list.layoutManager = LinearLayoutManager(context)
@@ -52,8 +64,14 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
     }
 
     companion object {
+        const val ARG_EXCHANGE_TYPE = "arg-exchange-type"
+
         @JvmStatic
-        fun newInstance() = HoldingListFragment()
+        fun newInstance(exchangeType: ExchangeType) = HoldingListFragment().apply {
+            arguments = Bundle().apply {
+                putSerializable(ARG_EXCHANGE_TYPE, exchangeType)
+            }
+        }
     }
 
     override fun onHoldingClicked(balanceData: BalanceData) {

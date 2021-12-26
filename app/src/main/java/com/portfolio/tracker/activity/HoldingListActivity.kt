@@ -5,7 +5,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.portfolio.tracker.R
+import com.portfolio.tracker.fragment.HoldingDetailFragment
 import com.portfolio.tracker.fragment.HoldingListFragment
+import com.portfolio.tracker.model.ExchangeType
 
 class HoldingListActivity : AppCompatActivity() {
 
@@ -22,7 +24,7 @@ class HoldingListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_holding_list)
         supportFragmentManager
             .beginTransaction()
-            .replace(R.id.container, HoldingListFragment.newInstance())
+            .replace(R.id.container, HoldingDetailFragment.newInstance())
             .commit()
     }
 }
