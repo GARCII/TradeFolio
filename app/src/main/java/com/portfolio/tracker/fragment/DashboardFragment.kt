@@ -6,10 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.R
 import com.portfolio.tracker.activity.ExchangeListActivity
+import com.portfolio.tracker.activity.HoldingListActivity
 import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.util.LoadingState
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
@@ -42,17 +42,20 @@ class DashboardFragment : Fragment() {
                 viewModel.connectPortfolio(requireContext(), exchange)
             }
         }
-
         button_list_exchange.setOnClickListener {
             activity?.let { activity ->
                 ExchangeListActivity.launchActivity(activity)
+            }
+        }
+        button_list_holding.setOnClickListener {
+            activity?.let { activity ->
+                HoldingListActivity.launchActivity(activity)
             }
         }
 
         viewModel.loadingState.observe(viewLifecycleOwner, {
             manageLoading(it)
         })
-
         viewModel.data.observe(requireActivity(), {
             it.entries.forEach { entry ->
                 Log.e("Wallet", "${entry.value.getBalance(Currency.USDT).total}")
@@ -60,9 +63,6 @@ class DashboardFragment : Fragment() {
         })
     }
 
-    /**
-     * Manage visibilities of views depending on loading status
-     */
     private fun manageLoading(loadingState: LoadingState) {
         when (loadingState.status) {
             LoadingState.Status.LOADING -> progress_circular.visibility = View.VISIBLE

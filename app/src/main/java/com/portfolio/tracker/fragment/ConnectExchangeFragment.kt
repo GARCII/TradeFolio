@@ -35,7 +35,6 @@ class ConnectExchangeFragment : Fragment() {
             }
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         outState.putSerializable(ARG_EXCHANGE_TYPE, exchangeType)
         super.onSaveInstanceState(outState)
@@ -54,15 +53,14 @@ class ConnectExchangeFragment : Fragment() {
         if (!this::viewModel.isInitialized) {
             viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
         }
-        val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(requireContext())
 
+        val sharedPreferencesUtils = TradeFolioSharedPreferencesUtils(requireContext())
         exchangeType.getSpecificParamItem()?.let { specific ->
             edit_text_specific_exchange_item.apply {
                 visibility = View.VISIBLE
                 hint = specific.getHint(requireContext())
             }
         }
-
 
         text_view_exchange_name.text = exchangeType.getName(requireContext())
         image_view_exchange_icon.setImageDrawable(exchangeType.getResourceId(requireContext()))
@@ -102,7 +100,6 @@ class ConnectExchangeFragment : Fragment() {
             exchangeType.getSpecificParamItem()?.let {
                 val specificationPref = sharedPreferencesUtils.getString(it.getPrefKey(exchangeType))
                 Log.e("TEST", "Specification : $specificationPref")
-
             }
             Toast.makeText(
                 context,

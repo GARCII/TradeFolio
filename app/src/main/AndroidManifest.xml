@@ -7,15 +7,18 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:fullBackupContent="false"
-        android:allowBackup="false"
         android:name=".TradeFolioApplication"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TradeFolio"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".activity.HoldingListActivity"
+            android:exported="false" />
         <activity
             android:name=".activity.ExchangeListActivity"
             android:exported="false" />

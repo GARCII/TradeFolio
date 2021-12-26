@@ -27,8 +27,11 @@
     <string name="tf_connect">Connect</string>
     <string name="tf_synchronize">Synchronize</string>
     <string name="tf_exchange_list">Exchanges</string>
+    <string name="tf_holding_list">Holdings</string>
     <string name="tf_exchange_param_account_group">Account group</string>
     <string name="tf_exchange_param_passphrase">Passphrase</string>
     <string name="tf_error_message">An error occurred during the request, please retry later.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
