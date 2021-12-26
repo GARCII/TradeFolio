@@ -26,6 +26,7 @@
             android:name=".activity.ConnectExchangeActivity"
             android:exported="false" />
         <activity
+            android:windowSoftInputMode="adjustNothing"
             android:name=".activity.HomeActivity"
             android:exported="true">
             <intent-filter>

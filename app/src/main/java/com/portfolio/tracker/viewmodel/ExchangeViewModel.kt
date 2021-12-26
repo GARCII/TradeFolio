@@ -47,7 +47,6 @@ internal class ExchangeViewModel : ViewModel() {
         loadingState.postValue(LoadingState.LOADING)
         CoroutineScope(Dispatchers.IO).launch {
             try {
-
                 val exchange = ConnectUtils.getExchange(context, exchangeType)
                 exchange?.let {
                     portfolio = buildPortfolioData(exchange, exchangeType)

@@ -35,18 +35,20 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
             viewModel = ViewModelProviders.of(this).get(ExchangeViewModel::class.java)
         }
         context?.let { context ->
-            viewModel.connectPortfolio(context, ExchangeType.ASCENDEX)
-            viewModel.isExchangeConned.observe(requireActivity(), {
-                if (it) {
-                    recycler_view_holding_list.layoutManager = LinearLayoutManager(context)
-                    adapter = HoldingListAdapter(context, this, viewModel)
-                    recycler_view_holding_list.adapter = adapter
-                }
-            })
+            viewModel.apply {
+                connectPortfolio(context, ExchangeType.ASCENDEX)
+                isExchangeConned.observe(requireActivity(), {
+                    if (it) {
+                        recycler_view_holding_list.layoutManager = LinearLayoutManager(context)
+                        adapter = HoldingListAdapter(context, this@HoldingListFragment, viewModel)
+                        recycler_view_holding_list.adapter = adapter
+                    }
+                })
+                loadingState.observe(viewLifecycleOwner, {
+                    manageLoading(it)
+                })
+            }
         }
-        viewModel.loadingState.observe(viewLifecycleOwner, {
-            manageLoading(it)
-        })
     }
 
     companion object {
