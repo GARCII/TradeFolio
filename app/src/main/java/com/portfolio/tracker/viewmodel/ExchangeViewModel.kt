@@ -183,22 +183,8 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
                                         this.depositing,
                                         Date(),
                                         this.currency,
-                                        it.id
-                                    )
-                                )
-                            } else {
-                                //TODO figure out how to refacto
-                                balances.add(
-                                    BalanceData(
-                                        this.total,
-                                        this.available,
-                                        this.frozen,
-                                        this.borrowed,
-                                        this.loaned,
-                                        this.withdrawing,
-                                        this.depositing,
-                                        Date(),
-                                        this.currency,
+                                        it.id,
+                                        it.priceQuotes.price
                                     )
                                 )
                             }

@@ -22,10 +22,10 @@ class CoinMarketRepository {
     }
 
     private fun convertResponseToCoinMarket(coinMarketResponse: CoinMarketResponse): List<CoinMarket> {
-        val map = mutableMapOf<Currency, PriceQuote>()
-        return coinMarketResponse.data.map {
+        val coinList = mutableListOf<CoinMarket>()
+        coinMarketResponse.data.forEach {
             it.value.priceQuotes.forEach { priceQuote ->
-                map[Currency.getInstanceNoCreate(it.key)] = PriceQuote(
+                val priceQuote = PriceQuote(
                     "${priceQuote.value.price}",
                     "${priceQuote.value.dayVolume}",
                     "${priceQuote.value.marketCap}",
@@ -33,19 +33,21 @@ class CoinMarketRepository {
                     "${priceQuote.value.dayChange}",
                     "${priceQuote.value.weekChange}"
                 )
+                coinList.add(
+                    CoinMarket(
+                        it.value.id,
+                        it.value.name,
+                        it.value.symbol,
+                        it.value.slug,
+                        it.value.rank,
+                        "${it.value.circulationSupply}",
+                        "${it.value.totalSupply}",
+                        "${it.value.maxSupply}",
+                        priceQuote
+                    )
+                )
             }
-
-            CoinMarket(
-                it.value.id,
-                it.value.name,
-                it.value.symbol,
-                it.value.slug,
-                it.value.rank,
-                "${it.value.circulationSupply}",
-                "${it.value.totalSupply}",
-                "${it.value.maxSupply}",
-                map
-            )
         }
+        return coinList
     }
 }

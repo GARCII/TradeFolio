@@ -74,7 +74,7 @@ data class CoinMarket(
     val circulationSupply: String,
     val totalSupply: String,
     val maxSupply: String,
-    val priceQuotes: Map<Currency, PriceQuote>
+    val priceQuotes: PriceQuote
 )
 
 data class PriceQuote(

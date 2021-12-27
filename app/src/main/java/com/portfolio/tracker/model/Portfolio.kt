@@ -11,14 +11,14 @@ data class Portfolio(
     val exchangeType: ExchangeType,
     val timestamp: Date,
     val wallets: List<WalletData>
-): Serializable
+) : Serializable
 
 data class WalletData(
     val id: String?,
     val balances: List<BalanceData>,
     val walletName: String,
     val walletType: Set<Wallet.WalletFeature>
-): Serializable
+) : Serializable
 
 data class BalanceData(
     val total: BigDecimal,
@@ -30,5 +30,6 @@ data class BalanceData(
     val depositing: BigDecimal,
     val updateData: Date,
     val currency: Currency,
-    val id: String? = null,
-    ) : Serializable
+    val id: String,
+    val currentPrice: String
+) : Serializable
