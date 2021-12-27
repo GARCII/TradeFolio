@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.portfolio.tracker.R
 import com.portfolio.tracker.model.BalanceData
 import com.portfolio.tracker.model.getResourceId
+import com.portfolio.tracker.util.getCoinMarketImageUrl
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 
 internal class HoldingListAdapter(
@@ -43,7 +45,10 @@ internal class HoldingListAdapter(
 
         fun bind(balanceData: BalanceData) {
             name.text = "${balanceData.currency.displayName} - ${balanceData.currency.currencyCode}"
-            imageView.setImageDrawable(balanceData.currency.getResourceId(context))
+            balanceData.id?.let {
+                Glide.with(context).load(getCoinMarketImageUrl(it)).into(imageView);
+            }
+            //imageView.setImageDrawable(balanceData.currency.getResourceId(context))
         }
     }
 

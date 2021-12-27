@@ -9,15 +9,15 @@ import org.knowm.xchange.currency.Currency
 
 class CoinMarketRepository {
 
-    suspend fun getQuote(symbol: String): Resource<List<CoinMarket>> {
+    suspend fun getQuotes(symbols: String): Resource<List<CoinMarket>> {
         val api = Client.getCoinMarketApi()
-        val result = api.getCurrencies(symbol = symbol)
+        val result = api.getCurrencies(symbols = symbols)
         return if (result.isSuccessful && result.body() != null) {
             val coinMarketResponse =
                 convertResponseToCoinMarket(result.body() as CoinMarketResponse)
             Resource(Resource.Status.SUCCESS, coinMarketResponse)
         } else {
-            Resource(Resource.Status.ERROR, null, result.message())
+            Resource(Resource.Status.ERROR, listOf(), result.errorBody().toString())
         }
     }
 

@@ -29,5 +29,6 @@ data class BalanceData(
     val withdrawing: BigDecimal,
     val depositing: BigDecimal,
     val updateData: Date,
-    val currency: Currency
-) : Serializable
+    val currency: Currency,
+    val id: String? = null,
+    ) : Serializable

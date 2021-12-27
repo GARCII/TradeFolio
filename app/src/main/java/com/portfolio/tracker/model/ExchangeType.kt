@@ -100,7 +100,7 @@ enum class ExchangeType {
     }
 
     fun isSyncAuthorized() = when (this) {
-        BINANCE, COINBASE, FTX, ASCENDEX, DERIBIT, BITMEX, BITTREX, KUCOIN, GATE_IO, OKEX, HUOBI -> true
+        FTX, ASCENDEX, DERIBIT, BITMEX, BITTREX, KUCOIN, GATE_IO, OKEX, HUOBI, BINANCE, COINBASE -> true
         KRAKEN, BITFINEX, CRYPTO_COM -> false
     }
 

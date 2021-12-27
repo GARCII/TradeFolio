@@ -6,7 +6,8 @@ import java.util.*
 
 
 data class CoinMarketResponse(
-    val data: Map<String, CoinMarketDataResponse>
+    val data: Map<String, CoinMarketDataResponse>,
+    val status :CurrencyStatusResponse
 )
 
 data class CoinMarketDataResponse(
@@ -26,13 +27,13 @@ data class CoinMarketDataResponse(
     val rank: Int,
 
     @SerializedName("circulating_supply")
-    val circulationSupply: Int,
+    val circulationSupply: Double,
 
     @SerializedName("total_supply")
-    val totalSupply: Int,
+    val totalSupply: Double,
 
     @SerializedName("max_supply")
-    val maxSupply: Int,
+    val maxSupply: Double,
 
     @SerializedName("quote")
     val priceQuotes: Map<String, PriceQuoteResponse>
@@ -51,6 +52,17 @@ data class PriceQuoteResponse(
     val dayChange: Double,
     @SerializedName("percent_change_7d")
     val weekChange: Double
+)
+
+data class CurrencyStatusResponse(
+    val timestamp: Date,
+    @SerializedName("error_code")
+    val errorCode: Int,
+    @SerializedName("error_message")
+    val errorMessage: String,
+    val elapsed: Int,
+    @SerializedName("credit_count")
+    val creditCount: Int
 )
 
 data class CoinMarket(

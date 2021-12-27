@@ -39,10 +39,7 @@ class DashboardFragment : Fragment() {
         }
 
         if (!this::currencyViewModel.isInitialized) {
-            currencyViewModel = ViewModelProviders.of(
-                this,
-                CurrencyViewModel.CurrencyViewModelFactory(Currency.BTC)
-            ).get(CurrencyViewModel::class.java)
+            currencyViewModel = ViewModelProviders.of(this).get(CurrencyViewModel::class.java)
         }
     }
 
@@ -50,8 +47,7 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         button_synchronize.setOnClickListener {
-            //viewModel.synchronize(requireContext())
-            currencyViewModel.geQuote()
+            viewModel.synchronize(requireContext())
         }
 
         button_list_exchange.setOnClickListener {
@@ -69,11 +65,17 @@ class DashboardFragment : Fragment() {
         viewModel.loadingState.observe(viewLifecycleOwner, {
             manageLoading(it)
         })
+
         viewModel.data.observe(requireActivity(), {
             it.entries.forEach { entry ->
                 Log.e("Wallet", "${entry.value.getBalance(Currency.USDT).total}")
             }
         })
+
+        viewModel.tickers.observe(requireActivity(), {
+            viewModel.geQuotes(it)
+        })
+
     }
 
     private fun manageLoading(loadingState: LoadingState) {

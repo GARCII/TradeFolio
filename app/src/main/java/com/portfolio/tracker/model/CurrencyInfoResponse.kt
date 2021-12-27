@@ -12,11 +12,3 @@ data class CurrencyInfoResponse(
     val date_added: Date,
     val status: CurrencyStatusResponse
 )
-
-data class CurrencyStatusResponse(
-    val timestamp: Date,
-    val errorCode: Int,
-    val errorMessage: String,
-    val elapsed: Int,
-    val creditCount: Int
-)

@@ -8,3 +8,5 @@ const val COIN_MARKET_CAP_API_KEY = "e9b2d6c0-a0d5-4440-8f18-4be5fe6ff3a6"
 
 const val CURRENCY_INFO_URL = "/cryptocurrency/info"
 const val CURRENCY_QUOTE_URL = "cryptocurrency/quotes/latest"
+
+fun getCoinMarketImageUrl(id: String) = "https://s2.coinmarketcap.com/static/img/coins/64x64/$id.png"

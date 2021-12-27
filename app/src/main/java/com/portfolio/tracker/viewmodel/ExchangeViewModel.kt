@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.portfolio.tracker.model.*
+import com.portfolio.tracker.repository.CoinMarketRepository
 import com.portfolio.tracker.util.*
 import io.gate.gateapi.ApiException
 import io.gate.gateapi.Configuration
@@ -20,7 +21,9 @@ import org.knowm.xchange.binance.dto.BinanceException
 import org.knowm.xchange.bitmex.BitmexException
 import org.knowm.xchange.bittrex.dto.BittrexException
 import org.knowm.xchange.coinbase.dto.CoinbaseException
+import org.knowm.xchange.currency.Currency
 import org.knowm.xchange.deribit.v2.dto.DeribitException
+import org.knowm.xchange.dto.account.Balance
 import org.knowm.xchange.dto.account.Wallet
 import org.knowm.xchange.exceptions.ExchangeException
 import org.knowm.xchange.ftx.FtxException
@@ -34,8 +37,11 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
 
     val loadingState = MutableLiveData<LoadingState>()
     val data = MutableLiveData<Map<String, Wallet>>()
-    val isExchangeConned = MutableLiveData<Boolean>()
+    val tickers = MutableLiveData<String>()
+    val isExchangeConnected = MutableLiveData<Boolean>()
     var portfolio: Portfolio? = null
+    private var repository: CoinMarketRepository = CoinMarketRepository()
+    private var exchangeData: Exchange? = null
 
     fun synchronize(context: Context) {
         when (exchangeType) {
@@ -50,11 +56,21 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
             try {
                 val exchange = ConnectUtils.getExchange(context, exchangeType)
                 exchange?.let {
-                    portfolio = buildPortfolioData(exchange)
-                    isExchangeConned.postValue(true)
-                    loadingState.postValue(LoadingState.LOADED)
+                    exchangeData = exchange
+                    val set = mutableSetOf<Balance>()
+                    exchange.accountService.accountInfo.wallets.entries.forEach {
+                        it.value.balances.forEach { balance ->
+                            balance.value.apply {
+                                if (this.total > BigDecimal(0) && balance.value.currency != Currency.USD) {
+                                   set.add(this)
+                                }
+                            }
+                        }
+                    }
+                    val test = set.joinToString(separator = ",") { balance -> balance.currency.currencyCode }
+                    tickers.postValue(test)
                 } ?: run {
-                    isExchangeConned.postValue(true)
+                    isExchangeConnected.postValue(false)
                     loadingState.postValue(LoadingState.error("Exchange not found"))
                 }
 
@@ -124,27 +140,69 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
         return count > 0
     }
 
+    fun geQuotes(symbols: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = repository.getQuotes(symbols)
+                when (response.status) {
+                    Resource.Status.SUCCESS -> {
+                        exchangeData?.let { it ->
+                            portfolio = buildPortfolioData(it, response.data!!)
+                            loadingState.postValue(LoadingState.LOADED)
+                            isExchangeConnected.postValue(true)
+                        }
+                    }
+                    Resource.Status.ERROR -> loadingState.postValue(LoadingState.error(response.message))
+                }
+            } catch (e: IOException) {
+                loadingState.postValue(LoadingState.error("error_message"))
+            }
+        }
+    }
+
     //TODO Refactoring / Configure balance limit
-    private fun buildPortfolioData(exchange: Exchange): Portfolio {
+    private fun buildPortfolioData(
+        exchange: Exchange,
+        coinMarketList: List<CoinMarket>): Portfolio {
         val walletsData = mutableListOf<WalletData>()
         val balances = mutableListOf<BalanceData>()
         exchange.accountService.accountInfo.wallets.entries.forEach {
-            it.value.balances.forEach { balance ->
-                balance.value.apply {
-                    if (this.total > BigDecimal(0)) {
-                        balances.add(
-                            BalanceData(
-                                this.total,
-                                this.available,
-                                this.frozen,
-                                this.borrowed,
-                                this.loaned,
-                                this.withdrawing,
-                                this.depositing,
-                                Date(),
-                                this.currency
-                            )
-                        )
+            it.value.balances.toSortedMap(compareBy { it.displayName }).forEach { balance ->
+                coinMarketList.forEach {
+                    balance.value.apply {
+                        if (this.total > BigDecimal(0)) {
+                            if (it.symbol == this.currency.currencyCode) {
+                                balances.add(
+                                    BalanceData(
+                                        this.total,
+                                        this.available,
+                                        this.frozen,
+                                        this.borrowed,
+                                        this.loaned,
+                                        this.withdrawing,
+                                        this.depositing,
+                                        Date(),
+                                        this.currency,
+                                        it.id
+                                    )
+                                )
+                            } else {
+                                //TODO figure out how to refacto
+                                balances.add(
+                                    BalanceData(
+                                        this.total,
+                                        this.available,
+                                        this.frozen,
+                                        this.borrowed,
+                                        this.loaned,
+                                        this.withdrawing,
+                                        this.depositing,
+                                        Date(),
+                                        this.currency,
+                                    )
+                                )
+                            }
+                        }
                     }
                 }
             }

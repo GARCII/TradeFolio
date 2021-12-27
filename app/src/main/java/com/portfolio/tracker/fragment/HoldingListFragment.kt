@@ -48,7 +48,7 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
         }
         context?.let { context ->
             viewModel.synchronize(context)
-            viewModel.isExchangeConned.observe(requireActivity(), {
+            viewModel.isExchangeConnected.observe(requireActivity(), {
                 if (it && viewModel.isDisplayable()) {
                     view.recycler_view_holding_list.layoutManager =
                         LinearLayoutManager(context)
@@ -62,7 +62,9 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
             viewModel.loadingState.observe(viewLifecycleOwner, {
                 manageLoading(it)
             })
-
+            viewModel.tickers.observe(requireActivity(), {
+                viewModel.geQuotes(it)
+            })
         }
     }
 

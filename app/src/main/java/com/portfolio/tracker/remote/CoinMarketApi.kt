@@ -14,6 +14,6 @@ interface CoinMarketApi {
     @GET(CURRENCY_QUOTE_URL)
     suspend fun getCurrencies(
         @Header("X-CMC_PRO_API_KEY") apiKey: String = COIN_MARKET_CAP_API_KEY,
-        @Query("symbol") symbol: String,
+        @Query("symbol") symbols: String,
     ): Response<CoinMarketResponse>
 }
