@@ -12,6 +12,7 @@ import com.portfolio.tracker.activity.ExchangeListActivity
 import com.portfolio.tracker.activity.HoldingListActivity
 import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.util.LoadingState
+import com.portfolio.tracker.viewmodel.CurrencyViewModel
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 import kotlinx.android.synthetic.main.fragment_connect_exchange.progress_circular
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -20,6 +21,7 @@ import org.knowm.xchange.currency.Currency
 
 class DashboardFragment : Fragment() {
     private lateinit var viewModel: ExchangeViewModel
+    private lateinit var currencyViewModel: CurrencyViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,13 +37,21 @@ class DashboardFragment : Fragment() {
                 ExchangeViewModel.ExchangeViewModelFactory(ExchangeType.BINANCE)
             ).get(ExchangeViewModel::class.java)
         }
+
+        if (!this::currencyViewModel.isInitialized) {
+            currencyViewModel = ViewModelProviders.of(
+                this,
+                CurrencyViewModel.CurrencyViewModelFactory(Currency.BTC)
+            ).get(CurrencyViewModel::class.java)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         button_synchronize.setOnClickListener {
-            viewModel.synchronize(requireContext())
+            //viewModel.synchronize(requireContext())
+            currencyViewModel.geQuote()
         }
 
         button_list_exchange.setOnClickListener {

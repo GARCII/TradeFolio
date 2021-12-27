@@ -108,7 +108,7 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
         }
     }
 
-    fun getHoldingList(): MutableSet<BalanceData> {
+    fun getHoldings(): MutableSet<BalanceData> {
         val holdings = mutableSetOf<BalanceData>()
         portfolio?.wallets?.forEach {
             holdings.addAll(it.balances)
@@ -116,7 +116,7 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
         return holdings.toSortedSet(compareBy { it.currency.displayName })
     }
 
-    fun isExchangeDisplayable(): Boolean {
+    fun isDisplayable(): Boolean {
         var count = 0
         portfolio?.wallets?.forEach {
             count += it.balances.size

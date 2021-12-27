@@ -24,7 +24,7 @@ internal class HoldingListAdapter(
     }
 
     override fun onBindViewHolder(holder: HoldingViewHolder, position: Int) {
-        val balanceData = viewModel.getHoldingList().toList()[position]
+        val balanceData = viewModel.getHoldings().toList()[position]
         holder.apply {
             bind(balanceData)
             itemView.setOnClickListener {
@@ -33,7 +33,7 @@ internal class HoldingListAdapter(
         }
     }
 
-    override fun getItemCount(): Int = viewModel.getHoldingList().size
+    override fun getItemCount(): Int = viewModel.getHoldings().size
 
     class HoldingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

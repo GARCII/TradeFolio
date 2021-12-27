@@ -49,7 +49,7 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
         context?.let { context ->
             viewModel.synchronize(context)
             viewModel.isExchangeConned.observe(requireActivity(), {
-                if (it && viewModel.isExchangeDisplayable()) {
+                if (it && viewModel.isDisplayable()) {
                     view.recycler_view_holding_list.layoutManager =
                         LinearLayoutManager(context)
                     adapter = HoldingListAdapter(context, this, viewModel)
