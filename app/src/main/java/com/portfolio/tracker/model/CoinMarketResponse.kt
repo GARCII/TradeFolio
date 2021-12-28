@@ -1,7 +1,6 @@
 package com.portfolio.tracker.model
 
 import com.google.gson.annotations.SerializedName
-import org.knowm.xchange.currency.Currency
 import java.util.*
 
 

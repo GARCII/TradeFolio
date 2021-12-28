@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="@dimen/tf_margin_quarter">
 
@@ -20,25 +20,37 @@
             android:layout_marginEnd="@dimen/tf_margin"
             android:contentDescription="@string/tf_ok" />
 
-        <TextView
-            android:layout_weight="1"
-            android:id="@+id/text_view_holding_name"
+        <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
-            android:textSize="@dimen/tf_text_normal"
-            android:textStyle="bold" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_view_holding_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="@dimen/tf_text_normal"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/text_view_holding_total"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="#F0F0F0"
+                android:textSize="@dimen/tf_text_normal" />
+        </LinearLayout>
 
         <TextView
-            android:layout_weight="1"
-            tools:text="34 $"
             android:id="@+id/text_view_holding_price"
             android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="end|center_vertical"
             android:textColor="@color/white"
-            android:textSize="@dimen/tf_text_small" />
+            android:textSize="@dimen/tf_text_small"
+            tools:text="34 $" />
     </LinearLayout>
 
     <View

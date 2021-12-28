@@ -5,7 +5,6 @@ import com.portfolio.tracker.model.CoinMarketResponse
 import com.portfolio.tracker.model.PriceQuote
 import com.portfolio.tracker.remote.Client
 import com.portfolio.tracker.util.Resource
-import org.knowm.xchange.currency.Currency
 
 class CoinMarketRepository {
 
@@ -25,14 +24,6 @@ class CoinMarketRepository {
         val coinList = mutableListOf<CoinMarket>()
         coinMarketResponse.data.forEach {
             it.value.priceQuotes.forEach { priceQuote ->
-                val priceQuote = PriceQuote(
-                    "${priceQuote.value.price}",
-                    "${priceQuote.value.dayVolume}",
-                    "${priceQuote.value.marketCap}",
-                    "${priceQuote.value.hourChange}",
-                    "${priceQuote.value.dayChange}",
-                    "${priceQuote.value.weekChange}"
-                )
                 coinList.add(
                     CoinMarket(
                         it.value.id,
@@ -43,7 +34,14 @@ class CoinMarketRepository {
                         "${it.value.circulationSupply}",
                         "${it.value.totalSupply}",
                         "${it.value.maxSupply}",
-                        priceQuote
+                        PriceQuote(
+                            "${priceQuote.value.price}",
+                            "${priceQuote.value.dayVolume}",
+                            "${priceQuote.value.marketCap}",
+                            "${priceQuote.value.hourChange}",
+                            "${priceQuote.value.dayChange}",
+                            "${priceQuote.value.weekChange}"
+                        )
                     )
                 )
             }

@@ -2,7 +2,6 @@ package com.portfolio.tracker.remote
 
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.GsonBuilder
-import com.portfolio.tracker.util.BYBIT_BASE_URL
 import com.portfolio.tracker.util.COIN_MARKET_CAP_BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

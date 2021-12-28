@@ -81,9 +81,6 @@ class ConnectExchangeFragment : Fragment() {
                 }
             }
 
-            // val isApiKeyExist = !sharedPreferencesUtils.contains(exchangeType.getApiPrefKey())
-            // val can = !sharedPreferencesUtils.contains(exchangeType.getSecretPrefKey())
-
             if (Utils.isConnectedToNetwork(requireContext()) &&
                 !sharedPreferencesUtils.getString(exchangeType.getApiPrefKey()).isNullOrBlank() &&
                 !sharedPreferencesUtils.getString(exchangeType.getSecretPrefKey()).isNullOrBlank()) {

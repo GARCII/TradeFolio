@@ -202,11 +202,6 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
                 )
             )
         }
-        walletsData.forEach {
-            it.balances.forEach { balance ->
-                Log.e("TEST", "${balance.currency.currencyCode}")
-            }
-        }
 
         return Portfolio(
             exchange.accountService.accountInfo.username,

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.portfolio.tracker.R
 import com.portfolio.tracker.model.BalanceData
-import com.portfolio.tracker.model.getResourceId
 import com.portfolio.tracker.util.formatDecimal
 import com.portfolio.tracker.util.getCoinMarketImageUrl
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
@@ -43,14 +42,15 @@ internal class HoldingListAdapter(
         private val context = itemView.context
         private val name = itemView.findViewById<TextView>(R.id.text_view_holding_name)
         private val price = itemView.findViewById<TextView>(R.id.text_view_holding_price)
+        private val total = itemView.findViewById<TextView>(R.id.text_view_holding_total)
         private val imageView = itemView.findViewById<ImageView>(R.id.image_view_holding)
 
         fun bind(balanceData: BalanceData) {
-            price.text = balanceData.currentPrice.toDouble().formatDecimal()
-            name.text = "${balanceData.currency.displayName} - ${balanceData.currency.currencyCode}"
-            balanceData.id?.let {
-                Glide.with(context).load(getCoinMarketImageUrl(it)).into(imageView);
-            }
+            val currentPrice = balanceData.currentPrice.toDouble()
+            price.text = currentPrice.formatDecimal()
+            total.text = (balanceData.total.toDouble() * balanceData.currentPrice.toDouble()).formatDecimal()
+            name.text = "${balanceData.currency.displayName}"
+            Glide.with(context).load(getCoinMarketImageUrl(balanceData.id)).into(imageView)
             //imageView.setImageDrawable(balanceData.currency.getResourceId(context))
         }
     }
