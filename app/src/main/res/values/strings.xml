@@ -32,7 +32,7 @@
     <string name="tf_exchange_param_passphrase">Passphrase</string>
     <string name="tf_error_message">An error occurred during the request, please retry later.</string>
     <string name="tf_exchange_empty_balance">You don\'t have any holdings yet.</string>
-
+    <string name="tf_exchange_all_holdings">All Holdings</string>
     <string name="tf_nav_dashboard">Dashboard</string>
     <string name="tf_nav_settings">Settings</string>
     <string name="tf_nav_connect">Connect</string>

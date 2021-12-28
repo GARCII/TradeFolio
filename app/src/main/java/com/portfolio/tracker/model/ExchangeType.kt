@@ -1,9 +1,12 @@
 package com.portfolio.tracker.model
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.portfolio.tracker.R
 import com.portfolio.tracker.fragment.HoldingListFragment
+import org.knowm.xchange.BaseExchange
 import org.knowm.xchange.ascendex.AscendexExchange
 import org.knowm.xchange.binance.BinanceExchange
 import org.knowm.xchange.bitfinex.BitfinexExchange
@@ -16,8 +19,9 @@ import org.knowm.xchange.huobi.HuobiExchange
 import org.knowm.xchange.kraken.KrakenExchange
 import org.knowm.xchange.kucoin.KucoinExchange
 import org.knowm.xchange.okex.v5.OkexExchange
+import java.io.Serializable
 
-enum class ExchangeType {
+enum class ExchangeType : ExchangeTypeItem {
     FTX, BINANCE, DERIBIT, KUCOIN, ASCENDEX, GATE_IO, HUOBI, KRAKEN, OKEX, COINBASE, BITFINEX, BITMEX, BITTREX, CRYPTO_COM;
 
     companion object {
@@ -25,7 +29,7 @@ enum class ExchangeType {
             values().toList().filter { it.isSyncAuthorized() }.sortedBy { it.name }
     }
 
-    fun getName(context: Context) = when (this) {
+    override fun getName(context: Context) = when (this) {
         FTX -> R.string.tf_exchange_name_ftx
         BINANCE -> R.string.tf_exchange_name_binance
         DERIBIT -> R.string.tf_exchange_name_deribit
@@ -44,11 +48,11 @@ enum class ExchangeType {
         context.getString(it)
     }
 
-    fun getApiPrefKey() = "${this.name}_api_key"
+    override fun getApiPrefKey() = "${this.name}_api_key"
 
-    fun getSecretPrefKey() = "${this.name}_secret_key"
+    override fun getSecretPrefKey() = "${this.name}_secret_key"
 
-    fun getResourceId(context: Context) = when (this) {
+    override fun getImageResource(context: Context) = when (this) {
         FTX -> R.drawable.ftx
         BINANCE -> R.drawable.binance
         DERIBIT -> R.drawable.deribit
@@ -67,7 +71,7 @@ enum class ExchangeType {
         ContextCompat.getDrawable(context, it)
     }
 
-    fun getSpecificParamItem() = when (this) {
+    override fun getSpecificParamItem() = when (this) {
         ASCENDEX -> SpecificExchangeParamType.ACCOUNT_GROUP
         KUCOIN, OKEX -> SpecificExchangeParamType.PASSPHRASE
         FTX,
@@ -83,7 +87,7 @@ enum class ExchangeType {
         CRYPTO_COM -> null
     }
 
-    fun getClassInstance() = when (this) {
+    override fun getExchangeReference(): Class<out BaseExchange>? = when (this) {
         FTX -> FtxExchange::class.java
         BINANCE -> BinanceExchange::class.java
         DERIBIT -> DeribitExchange::class.java
@@ -99,12 +103,12 @@ enum class ExchangeType {
         GATE_IO, CRYPTO_COM -> null
     }
 
-    fun isSyncAuthorized() = when (this) {
+    override fun isSyncAuthorized() = when (this) {
         FTX, ASCENDEX, DERIBIT, BITMEX, BITTREX, KUCOIN, GATE_IO, OKEX, HUOBI, BINANCE, COINBASE -> true
         KRAKEN, BITFINEX, CRYPTO_COM -> false
     }
 
-    fun getFragment() = HoldingListFragment.newInstance(this)
+    override fun getFragment() = HoldingListFragment.newInstance(this)
 }
 
 enum class SpecificExchangeParamType {
@@ -115,11 +119,11 @@ enum class SpecificExchangeParamType {
         PASSPHRASE -> "passphrase"
     }
 
-    fun getPrefKey(exchangeType: ExchangeType) = when (this) {
+    fun getPrefKey(exchangeType: ExchangeTypeItem) = when (this) {
         ACCOUNT_GROUP -> "account-group"
         PASSPHRASE -> "passphrase"
     }.let {
-        "${exchangeType.name}_$it"
+        "${(exchangeType as ExchangeType).name}_$it"
     }
 
     fun getHint(context: Context) = when (this) {
@@ -128,4 +132,15 @@ enum class SpecificExchangeParamType {
     }.let {
         context.getString(it)
     }
+}
+
+interface ExchangeTypeItem: Serializable {
+    fun getName(context: Context): String
+    fun getImageResource(context: Context) : Drawable?
+    fun getFragment(): Fragment
+    fun isSyncAuthorized(): Boolean
+    fun getSpecificParamItem(): SpecificExchangeParamType?
+    fun getExchangeReference(): Class<out BaseExchange>?
+    fun getSecretPrefKey(): String?
+    fun getApiPrefKey(): String?
 }

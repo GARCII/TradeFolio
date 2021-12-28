@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.portfolio.tracker.R
 import com.portfolio.tracker.adapter.HoldingsFragmentPagerAdapter
+import com.portfolio.tracker.model.AllHoldingType
 import com.portfolio.tracker.model.ExchangeType
+import com.portfolio.tracker.model.ExchangeTypeItem
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 import kotlinx.android.synthetic.main.fragment_holding_detail.*
 
@@ -33,7 +35,10 @@ class HoldingDetailFragment : Fragment() {
     }
 
     private fun setViewPager() {
-        val exchanges = ExchangeType.sanitizeExchanges()
+        val sanitizedExchanges = ExchangeType.sanitizeExchanges()
+        val exchanges = mutableListOf<ExchangeTypeItem>()
+        exchanges.add(AllHoldingType())
+        exchanges.addAll(sanitizedExchanges)
         view_pager_holdings.apply {
             offscreenPageLimit = exchanges.size
             adapter = HoldingsFragmentPagerAdapter(

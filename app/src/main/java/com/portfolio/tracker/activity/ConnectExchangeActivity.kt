@@ -7,6 +7,7 @@ import android.os.Bundle
 import com.portfolio.tracker.R
 import com.portfolio.tracker.fragment.ConnectExchangeFragment
 import com.portfolio.tracker.model.ExchangeType
+import com.portfolio.tracker.model.ExchangeTypeItem
 
 
 class ConnectExchangeActivity : AppCompatActivity() {
@@ -17,7 +18,7 @@ class ConnectExchangeActivity : AppCompatActivity() {
 
         fun launchActivity(
             activity: Activity,
-            exchange: ExchangeType
+            exchange: ExchangeTypeItem
         ) {
             val intent = Intent(activity, ConnectExchangeActivity::class.java)
             intent.putExtra(EXCHANGE_ID_EXTRA, exchange)

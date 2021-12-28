@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.portfolio.tracker.R
 import com.portfolio.tracker.model.ExchangeType
-
+import com.portfolio.tracker.model.ExchangeTypeItem
 
 class ExchangeListAdapter(
     private val context: Context,
@@ -41,13 +41,13 @@ class ExchangeListAdapter(
         private val name = itemView.findViewById<TextView>(R.id.text_view_exchange_name)
         private val imageView = itemView.findViewById<ImageView>(R.id.image_view_exchange)
 
-        fun bind(exchangeType: ExchangeType) {
+        fun bind(exchangeType: ExchangeTypeItem) {
             name.text = exchangeType.getName(context)
-            imageView.setImageDrawable(exchangeType.getResourceId(context))
+            imageView.setImageDrawable(exchangeType.getImageResource(context))
         }
     }
 
     interface ExchangeListListener {
-        fun onExchangeClicked(exchangeType: ExchangeType)
+        fun onExchangeClicked(exchangeType: ExchangeTypeItem)
     }
 }

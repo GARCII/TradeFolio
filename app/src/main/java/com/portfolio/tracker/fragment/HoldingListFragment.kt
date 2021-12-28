@@ -12,6 +12,7 @@ import com.portfolio.tracker.R
 import com.portfolio.tracker.adapter.HoldingListAdapter
 import com.portfolio.tracker.model.BalanceData
 import com.portfolio.tracker.model.ExchangeType
+import com.portfolio.tracker.model.ExchangeTypeItem
 import com.portfolio.tracker.util.LoadingState
 import com.portfolio.tracker.viewmodel.ExchangeViewModel
 import kotlinx.android.synthetic.main.fragment_holding_list.*
@@ -21,8 +22,7 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
 
     private var adapter: HoldingListAdapter? = null
     private lateinit var viewModel: ExchangeViewModel
-    private lateinit var exchangeType: ExchangeType
-
+    private lateinit var exchangeType: ExchangeTypeItem
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +37,7 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
-            exchangeType = it.getSerializable(ARG_EXCHANGE_TYPE) as ExchangeType
+            exchangeType = it.getSerializable(ARG_EXCHANGE_TYPE) as ExchangeTypeItem
         }
 
         if (!this::viewModel.isInitialized) {
@@ -72,7 +72,7 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
         const val ARG_EXCHANGE_TYPE = "arg-exchange-type"
 
         @JvmStatic
-        fun newInstance(exchangeType: ExchangeType) = HoldingListFragment().apply {
+        fun newInstance(exchangeType: ExchangeTypeItem) = HoldingListFragment().apply {
             arguments = Bundle().apply {
                 putSerializable(ARG_EXCHANGE_TYPE, exchangeType)
             }

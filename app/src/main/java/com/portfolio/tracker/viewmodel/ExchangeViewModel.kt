@@ -33,7 +33,7 @@ import java.io.IOException
 import java.math.BigDecimal
 import java.util.*
 
-internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewModel() {
+internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : ViewModel() {
 
     val loadingState = MutableLiveData<LoadingState>()
     val data = MutableLiveData<Map<String, Wallet>>()
@@ -211,7 +211,7 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeType) : ViewM
     }
 
     @Suppress("UNCHECKED_CAST")
-    class ExchangeViewModelFactory(private val exchangeType: ExchangeType) :
+    class ExchangeViewModelFactory(private val exchangeType: ExchangeTypeItem) :
         ViewModelProvider.NewInstanceFactory() {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return ExchangeViewModel(exchangeType) as T

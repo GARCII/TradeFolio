@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.portfolio.tracker.R
 import com.portfolio.tracker.adapter.ExchangeListAdapter
 import com.portfolio.tracker.model.ExchangeType
+import com.portfolio.tracker.model.ExchangeTypeItem
 import kotlinx.android.synthetic.main.activity_exchange_list.*
 
 class ExchangeListActivity : AppCompatActivity(), ExchangeListAdapter.ExchangeListListener {
@@ -30,7 +31,7 @@ class ExchangeListActivity : AppCompatActivity(), ExchangeListAdapter.ExchangeLi
         recycler_view_exchange_list.adapter = adapter
     }
 
-    override fun onExchangeClicked(exchangeType: ExchangeType) {
+    override fun onExchangeClicked(exchangeType: ExchangeTypeItem) {
         ConnectExchangeActivity.launchActivity(this, exchangeType)
     }
 }

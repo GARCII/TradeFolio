@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProviders
 import com.portfolio.tracker.R
 import com.portfolio.tracker.model.ExchangeType
+import com.portfolio.tracker.model.ExchangeTypeItem
 import com.portfolio.tracker.util.LoadingState
 import com.portfolio.tracker.util.TradeFolioSharedPreferencesUtils
 import com.portfolio.tracker.util.Utils
@@ -27,7 +28,7 @@ class ConnectExchangeFragment : Fragment() {
         const val ARG_EXCHANGE_TYPE = "arg-exchange-type"
 
         @JvmStatic
-        fun newInstance(exchangeType: ExchangeType) =
+        fun newInstance(exchangeType: ExchangeTypeItem) =
             ConnectExchangeFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_EXCHANGE_TYPE, exchangeType)
@@ -66,7 +67,7 @@ class ConnectExchangeFragment : Fragment() {
         }
 
         text_view_exchange_name.text = exchangeType.getName(requireContext())
-        image_view_exchange_icon.setImageDrawable(exchangeType.getResourceId(requireContext()))
+        image_view_exchange_icon.setImageDrawable(exchangeType.getImageResource(requireContext()))
 
         button_connect.setOnClickListener {
             val apiKey = edit_text_api_key.text.toString()

@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.portfolio.tracker.R
 import com.portfolio.tracker.fragment.HoldingDetailFragment
-import com.portfolio.tracker.fragment.HoldingListFragment
-import com.portfolio.tracker.model.ExchangeType
 
 class HoldingListActivity : AppCompatActivity() {
 

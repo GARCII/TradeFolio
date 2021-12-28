@@ -8,7 +8,7 @@ import java.util.*
 
 data class Portfolio(
     val username: String?,
-    val exchangeType: ExchangeType,
+    val exchangeType: ExchangeTypeItem,
     val timestamp: Date,
     val wallets: List<WalletData>
 ) : Serializable
