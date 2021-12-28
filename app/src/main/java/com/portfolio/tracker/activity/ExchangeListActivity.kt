@@ -7,7 +7,6 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.portfolio.tracker.R
 import com.portfolio.tracker.adapter.ExchangeListAdapter
-import com.portfolio.tracker.model.ExchangeType
 import com.portfolio.tracker.model.ExchangeTypeItem
 import kotlinx.android.synthetic.main.activity_exchange_list.*
 

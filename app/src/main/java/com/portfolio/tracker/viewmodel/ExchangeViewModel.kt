@@ -111,11 +111,16 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
             apiClient.setApiKeySecret(apiKey, secretKey)
             val apiInstance = SpotApi(apiClient)
             try {
-                val result =
-                    apiInstance.listSpotAccounts().currency("usdt").execute()
-                result.forEach {
-                    Log.e("Gate.io", "${it.available}")
-                }
+               apiKey?.let {
+                   secretKey?.let {
+                       val result =
+                           apiInstance.listSpotAccounts().currency("usdt").execute()
+                       result.forEach {
+                           Log.e("Gate.io", "${it.available}")
+                       }
+                   }
+               }
+
             } catch (e: GateApiException) {
                 Log.e("Gate.io", "${e.errorDetail} ${e.errorLabel} ${e.errorMessage}")
             } catch (e: ApiException) {
@@ -170,7 +175,7 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
             it.value.balances.toSortedMap(compareBy { it.displayName }).forEach { balance ->
                 coinMarketList.forEach {
                     balance.value.apply {
-                        if (this.total > BigDecimal(0)) {
+                        if (this.total > BigDecimal(0.0)) {
                             if (it.symbol == this.currency.currencyCode) {
                                 balances.add(
                                     BalanceData(
