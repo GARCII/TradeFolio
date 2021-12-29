@@ -104,8 +104,8 @@ enum class ExchangeType : ExchangeTypeItem {
     }
 
     override fun isSyncAuthorized() = when (this) {
-        FTX, ASCENDEX, DERIBIT, BITMEX, BITTREX, KUCOIN, GATE_IO, OKEX, HUOBI, BINANCE, COINBASE -> true
-        KRAKEN, BITFINEX, CRYPTO_COM -> false
+        BINANCE, KUCOIN, FTX, ASCENDEX -> true
+        KRAKEN, BITFINEX, CRYPTO_COM, DERIBIT, BITMEX, BITTREX, GATE_IO, OKEX, HUOBI, COINBASE -> false
     }
 
     override fun getFragment() = HoldingListFragment.newInstance(this)
@@ -134,9 +134,9 @@ enum class SpecificExchangeParamType {
     }
 }
 
-interface ExchangeTypeItem: Serializable {
+interface ExchangeTypeItem : Serializable {
     fun getName(context: Context): String
-    fun getImageResource(context: Context) : Drawable?
+    fun getImageResource(context: Context): Drawable?
     fun getFragment(): Fragment
     fun isSyncAuthorized(): Boolean
     fun getSpecificParamItem(): SpecificExchangeParamType?

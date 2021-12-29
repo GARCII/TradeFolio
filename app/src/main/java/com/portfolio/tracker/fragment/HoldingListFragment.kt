@@ -47,17 +47,18 @@ class HoldingListFragment : Fragment(), HoldingListAdapter.HoldingListListener {
         }
         context?.let { context ->
             viewModel.synchronize(context)
-            viewModel.isExchangeConnected.observe(requireActivity(), {
-                if (it && viewModel.isDisplayable()) {
-                    view.recycler_view_holding_list.layoutManager =
-                        LinearLayoutManager(context)
-                    adapter = HoldingListAdapter(context, this, viewModel)
-                    view.recycler_view_holding_list.adapter = adapter
-                } else {
-                    view.recycler_view_holding_list.visibility = View.GONE
-                    view.empty_balance_view.visibility = View.VISIBLE
-                }
-            })
+                viewModel.isDisplayable.observe(requireActivity(), {
+                    if (it) {
+                        view.recycler_view_holding_list.layoutManager =
+                            LinearLayoutManager(context)
+                        adapter = HoldingListAdapter(context, this, viewModel)
+                        view.recycler_view_holding_list.adapter = adapter
+                    } else {
+                        view.recycler_view_holding_list.visibility = View.GONE
+                        view.empty_balance_view.visibility = View.VISIBLE
+                    }
+                })
+
             viewModel.loadingState.observe(viewLifecycleOwner, {
                 manageLoading(it)
             })

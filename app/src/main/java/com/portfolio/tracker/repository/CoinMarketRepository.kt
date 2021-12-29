@@ -1,5 +1,8 @@
 package com.portfolio.tracker.repository
 
+import com.portfolio.tracker.core.Core
+import com.portfolio.tracker.core.entity.CoinInfo
+import com.portfolio.tracker.core.entity.CoinQuote
 import com.portfolio.tracker.model.CoinMarket
 import com.portfolio.tracker.model.CoinMarketResponse
 import com.portfolio.tracker.model.PriceQuote
@@ -12,8 +15,28 @@ class CoinMarketRepository {
         val api = Client.getCoinMarketApi()
         val result = api.getCurrencies(symbols = symbols)
         return if (result.isSuccessful && result.body() != null) {
-            val coinMarketResponse =
-                convertResponseToCoinMarket(result.body() as CoinMarketResponse)
+            val coinMarketResponse = convertResponseToCoinMarket(result.body() as CoinMarketResponse)
+            val coinList = coinMarketResponse.map {
+                CoinInfo(
+                    it.id,
+                    it.name,
+                    it.symbol,
+                    it.slug,
+                    it.rank,
+                    it.circulationSupply,
+                    it.totalSupply,
+                    it.maxSupply,
+                    CoinQuote(
+                        it.priceQuotes.price,
+                        it.priceQuotes.dayVolume,
+                        it.priceQuotes.marketCap,
+                        it.priceQuotes.hourChange,
+                        it.priceQuotes.dayChange,
+                        it.priceQuotes.weekChange,
+                    )
+                )
+            }
+            Core.database.coinInfoDao().insert(coinList)
             Resource(Resource.Status.SUCCESS, coinMarketResponse)
         } else {
             Resource(Resource.Status.ERROR, listOf(), result.errorBody().toString())

@@ -5,8 +5,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.portfolio.tracker.core.Core
+import com.portfolio.tracker.core.entity.Coin
+import com.portfolio.tracker.core.entity.Holding
 import com.portfolio.tracker.model.*
 import com.portfolio.tracker.repository.CoinMarketRepository
+import com.portfolio.tracker.repository.ExchangeRepository
 import com.portfolio.tracker.util.*
 import io.gate.gateapi.ApiException
 import io.gate.gateapi.Configuration
@@ -23,7 +27,6 @@ import org.knowm.xchange.bittrex.dto.BittrexException
 import org.knowm.xchange.coinbase.dto.CoinbaseException
 import org.knowm.xchange.currency.Currency
 import org.knowm.xchange.deribit.v2.dto.DeribitException
-import org.knowm.xchange.dto.account.Balance
 import org.knowm.xchange.dto.account.Wallet
 import org.knowm.xchange.exceptions.ExchangeException
 import org.knowm.xchange.ftx.FtxException
@@ -39,36 +42,55 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
     val data = MutableLiveData<Map<String, Wallet>>()
     val tickers = MutableLiveData<String>()
     val isExchangeConnected = MutableLiveData<Boolean>()
+    val isDisplayable = MutableLiveData<Boolean>()
     var portfolio: Portfolio? = null
     private var repository: CoinMarketRepository = CoinMarketRepository()
+    private var exchangeRepository: ExchangeRepository = ExchangeRepository()
     private var exchangeData: Exchange? = null
 
     fun synchronize(context: Context) {
         when (exchangeType) {
             ExchangeType.GATE_IO -> synchronizeGateio(context)
-            else -> synchronizeXchange(context)
+            else -> fetchExchange(context)
         }
     }
 
-    private fun synchronizeXchange(context: Context) {
+    private fun fetchExchange(context: Context) {
         loadingState.postValue(LoadingState.LOADING)
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val exchange = ConnectUtils.getExchange(context, exchangeType)
                 exchange?.let {
-                    exchangeData = exchange
-                    val set = mutableSetOf<Balance>()
+                    val set = mutableSetOf<Holding>()
                     exchange.accountService.accountInfo.wallets.entries.forEach {
                         it.value.balances.forEach { balance ->
                             balance.value.apply {
-                                if (this.total > BigDecimal(0) && balance.value.currency != Currency.USD) {
-                                   set.add(this)
+                                if (this.total > BigDecimal(0.0) && balance.value.currency != Currency.USD) {
+                                    set.add(
+                                        Holding(
+                                            "",
+                                            this.currency.currencyCode,
+                                            this.total.toDouble(),
+                                            this.available.toDouble(),
+                                            this.frozen.toDouble(),
+                                            this.borrowed.toDouble(),
+                                            this.loaned.toDouble(),
+                                            this.withdrawing.toDouble(),
+                                            this.depositing.toDouble(),
+                                            Coin(
+                                                this.currency.displayName,
+                                                this.currency.currencyCode
+                                            )
+                                        )
+                                    )
                                 }
                             }
                         }
                     }
-                    val test = set.joinToString(separator = ",") { balance -> balance.currency.currencyCode }
-                    tickers.postValue(test)
+                    Core.database.holdingDao().insert(set.toList())
+                    tickers.postValue(
+                        Core.database.holdingDao().getHoldings()
+                            .joinToString(separator = ",") { holding -> holding.coin.currencyCode })
                 } ?: run {
                     isExchangeConnected.postValue(false)
                     loadingState.postValue(LoadingState.error("Exchange not found"))
@@ -111,15 +133,15 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
             apiClient.setApiKeySecret(apiKey, secretKey)
             val apiInstance = SpotApi(apiClient)
             try {
-               apiKey?.let {
-                   secretKey?.let {
-                       val result =
-                           apiInstance.listSpotAccounts().currency("usdt").execute()
-                       result.forEach {
-                           Log.e("Gate.io", "${it.available}")
-                       }
-                   }
-               }
+                apiKey?.let {
+                    secretKey?.let {
+                        val result =
+                            apiInstance.listSpotAccounts().currency("usdt").execute()
+                        result.forEach {
+                            Log.e("Gate.io", "${it.available}")
+                        }
+                    }
+                }
 
             } catch (e: GateApiException) {
                 Log.e("Gate.io", "${e.errorDetail} ${e.errorLabel} ${e.errorMessage}")
@@ -137,12 +159,11 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
         return holdings.toSortedSet(compareBy { it.currency.displayName })
     }
 
-    fun isDisplayable(): Boolean {
-        var count = 0
-        portfolio?.wallets?.forEach {
-            count += it.balances.size
+    fun isDisplayable() {
+        CoroutineScope(Dispatchers.IO).launch {
+            isExchangeConnected.postValue(true)
+            isDisplayable.postValue(Core.database.holdingDao().getHoldings().isNotEmpty())
         }
-        return count > 0
     }
 
     fun geQuotes(symbols: String) {
@@ -151,11 +172,9 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
                 val response = repository.getQuotes(symbols)
                 when (response.status) {
                     Resource.Status.SUCCESS -> {
-                        exchangeData?.let { it ->
-                            portfolio = buildPortfolioData(it, response.data!!)
-                            loadingState.postValue(LoadingState.LOADED)
-                            isExchangeConnected.postValue(true)
-                        }
+                        portfolio = buildPortfolioData()
+                        loadingState.postValue(LoadingState.LOADED)
+                        isDisplayable()
                     }
                     Resource.Status.ERROR -> loadingState.postValue(LoadingState.error(response.message))
                 }
@@ -166,50 +185,42 @@ internal class ExchangeViewModel(private val exchangeType: ExchangeTypeItem) : V
     }
 
     //TODO Refactoring / Configure balance limit
-    private fun buildPortfolioData(
-        exchange: Exchange,
-        coinMarketList: List<CoinMarket>): Portfolio {
+    private fun buildPortfolioData(): Portfolio {
         val walletsData = mutableListOf<WalletData>()
         val balances = mutableListOf<BalanceData>()
-        exchange.accountService.accountInfo.wallets.entries.forEach {
-            it.value.balances.toSortedMap(compareBy { it.displayName }).forEach { balance ->
-                coinMarketList.forEach {
-                    balance.value.apply {
-                        if (this.total > BigDecimal(0.0)) {
-                            if (it.symbol == this.currency.currencyCode) {
-                                balances.add(
-                                    BalanceData(
-                                        this.total,
-                                        this.available,
-                                        this.frozen,
-                                        this.borrowed,
-                                        this.loaned,
-                                        this.withdrawing,
-                                        this.depositing,
-                                        Date(),
-                                        this.currency,
-                                        it.id,
-                                        it.priceQuotes.price
-                                    )
-                                )
-                            }
-                        }
-                    }
+        Core.database.holdingDao().getHoldings().forEach { holding ->
+            Core.database.coinInfoDao().getCoinsInfo().forEach {
+                if (it.symbol == holding.coin.currencyCode) {
+                    balances.add(
+                        BalanceData(
+                            it.id,
+                            BigDecimal(holding.total),
+                            BigDecimal(holding.available),
+                            BigDecimal(holding.frozen),
+                            BigDecimal(holding.borrowed),
+                            BigDecimal(holding.loaned),
+                            BigDecimal(holding.withdrawing),
+                            BigDecimal(holding.depositing),
+                            Date(),
+                            Currency.getInstance(holding.coin.currencyCode),
+                            it.coinQuote.price
+                        )
+                    )
                 }
             }
-
-            walletsData.add(
-                WalletData(
-                    it.key,
-                    balances,
-                    "beta",
-                    it.value.features
-                )
-            )
         }
 
+        walletsData.add(
+            WalletData(
+                "WalletId",
+                balances,
+                "beta",
+                setOf()
+            )
+        )
+
         return Portfolio(
-            exchange.accountService.accountInfo.username,
+            "username",
             exchangeType, Date(),
             walletsData
         )

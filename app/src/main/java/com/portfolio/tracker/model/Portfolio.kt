@@ -21,6 +21,7 @@ data class WalletData(
 ) : Serializable
 
 data class BalanceData(
+    val id: String,
     val total: BigDecimal,
     val available: BigDecimal,
     val frozen: BigDecimal,
@@ -30,6 +31,5 @@ data class BalanceData(
     val depositing: BigDecimal,
     val updateData: Date,
     val currency: Currency,
-    val id: String,
     val currentPrice: String
 ) : Serializable
