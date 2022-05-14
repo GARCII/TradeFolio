@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/view_group_empty_screen"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/dk_image_view_no_challenge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/empty_exchange_balance"
+        android:contentDescription="@string/tf_ok" />
+
+    <TextView
+        android:id="@+id/dk_text_view_no_holdings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tf_exchange_empty_balance"
+        android:gravity="center"
+        android:padding="@dimen/tf_margin"/>
+</LinearLayout>

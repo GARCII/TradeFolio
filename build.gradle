@@ -5,10 +5,14 @@ buildscript {
         retrofit_version = '2.6.0'
         glide_version = '4.12.0'
         lifecycle_version = '2.0.0'
+        xchange_version = '5.0.12'
+        gat_io_version = '6.23.0'
+        room_version = '2.2.4'
+        nav_version = '2.3.5'
     }
     repositories {
-        google()
         mavenCentral()
+        google()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:7.0.3"
@@ -16,6 +20,14 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+    }
+}
+
+allprojects {
+    project.ext {
+        min_sdk_version = 23
+        compile_sdk_version = 31
+        target_sdk_version = 31
     }
 }
 
